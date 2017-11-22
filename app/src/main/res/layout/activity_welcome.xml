@@ -1,9 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.liteon.com.icampusteacher.WelcomeActivity">
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/welcome_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_title_margin_bottom"
+        android:text="@string/welcome_title"
+        android:textSize="@dimen/page_title_text_size"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:id="@+id/welcome_icon"
+        android:layout_width="@dimen/welcome_icon_size"
+        android:layout_height="@dimen/welcome_icon_size"
+        android:layout_below="@id/welcome_title"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ic_launcher"/>
+    <TextView
+        android:id="@+id/user_term"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_icon"
+        android:layout_marginTop="@dimen/welcome_user_term_margin_height"
+        android:text="@string/welcome_user_term"
+        android:textSize="@dimen/user_term_text_size"
+        android:textAlignment="center"
+        android:gravity="center"/>
+    <ImageView
+        android:id="@+id/sep_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_below="@+id/user_term"
+        android:background="@color/md_grey_500"/>
+    <TextView
+        android:id="@+id/user_term_click_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sep_line"
+        android:text="@string/welcome_read_eula"
+        android:textSize="@dimen/user_term_text_size"
+        android:textAlignment="center"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/user_term_click"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_term_click_info"
+        android:text="@string/welcome_user_term"
+        android:textSize="@dimen/user_term_text_size"
+        android:textColor="@color/md_blue_700"
+        android:textAlignment="center"
+        android:gravity="center"/>
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/user_improve_plan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/welcome_radio_btn_margin_height"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:text="@string/welcome_join_program"
+        android:layout_below="@id/user_term_click"/>
 
-</android.support.constraint.ConstraintLayout>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/welcome_bottom_option_height"
+        layout="@layout/component_bottom"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

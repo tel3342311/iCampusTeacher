@@ -1,27 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">iCampus Teacher</string>
-    <string name="welcome_title">您好，歡迎使用 \niCampus Guardian\n 校園守護者</string>
-    <string name="welcome_user_term">使用者協議及隱私政策</string>
-    <string name="welcome_read_eula">點選同意以確認iCG校園守護者的使用者協議及隱私政策</string>
+    <string name="welcome_title">Hello, welcome to \niCampus Guardian\n </string>
+    <string name="welcome_user_term">End User License Agreement (EULA)</string>
+    <string name="welcome_read_eula">Please read the EULA and click on accept to proceed to the app</string>
     <string name="welcome_user_term_content">"END USER LICENSE AGREEMENT – CORPORATE SOLUTIONS V.01 Please read the following license agreement carefully before using this program. By accepting the agreement, you are agreeing to become the licensee and expressing your complete acceptance of all the terms and conditions of this license agreement. If you do not accept the terms of the agreement, do not install the program. Similarly, use of the program implies your acceptance to be bound by the terms and conditions of this license agreement. This license agreement represents the entire agreement. This license agreement supersedes any prior license agreements licensee with respect to this product or the product it replaces. Similarly, and where permissible under applicable legislation, the terms and conditions of the present license agreement shall take precedence over any communication or advertising material in the event that such material contradicts any of said terms and conditions or where such material predates this license agreement. The acceptance of the terms and conditions of this agreement does not confer any rights of ownership over the programs or products belonging to LITE-ON.  "</string>
-    <string name="welcome_join_program">參與使用者體驗改善計畫</string>
-    <string name="welcome_permission_term">學校老師可以獲得寶貝睡眠資訊</string>
-    <string name="welcome_accept">同意</string>
-    <string name="welcome_quit">退出</string>
+    <string name="welcome_join_program">Join iCG User Experience Improvement Program</string>
+    <string name="welcome_permission_term">Permission for school teacher to see your kid\'s sleeping information</string>
+    <string name="welcome_accept">Accept</string>
+    <string name="welcome_quit">Quit</string>
     <!--  login Page -->
-    <string name="login_teacher_account">請登入老師帳號</string>
+    <string name="login_teacher_account">Login your account</string>
     <string name="login_account_info">第一次登入，請使用學校給予的帳號及密碼登錄，日後請至選單“老師資料設定”內修改</string>
-    <string name="login_account">帳號</string>
-    <string name="login_password">密碼</string>
-    <string name="login_forget_password">忘記密碼?</string>
-    <string name="login_login">登入</string>
-    <string name="login_ok">好</string>
-    <string name="login_social_signin">使用第三方帳號登入</string>
+    <string name="login_account">Account</string>
+    <string name="login_password">Password</string>
+    <string name="login_forget_password">Forgot password?</string>
+    <string name="login_login">Login</string>
+    <string name="login_social_signin">Login with</string>
+    <string name="login_ok">OK</string>
     <string name="login_google">Google</string>
     <string name="login_facebook">Facebook</string>
-    <string name="login_error_email">電子郵件地址錯誤</string>
-    <string name="login_no_network">網路無法連線</string>
-    <string name="login_error_account_or_password">帳號或密碼輸入錯誤，請重新輸入</string>
-    <string name="login_error_no_server_connection">無法建立與系統連線, 請稍候再試!</string>
+    <string name="login_error_email">Email address does not exist</string>
+    <string name="login_no_network">Unable to connect to the internet</string>
+    <string name="login_error_account_or_password">Invalid account (email) or password, please try again!</string>
+    <string name="login_error_no_server_connection">Failed to connect to server. Please try again later!</string>
 </resources>

@@ -1,6 +1,4 @@
-package com.liteon.icampusguardian.util;
-
-import com.liteon.icampusguardian.R;
+package com.liteon.com.icampusteacher.util;
 
 import android.graphics.Point;
 import android.os.Bundle;
@@ -13,6 +11,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.liteon.com.icampusteacher.R;
+
 
 public class CustomDialog extends DialogFragment {
 	
@@ -27,18 +28,15 @@ public class CustomDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_custom, container);
-        // This shows the title, replace My Dialog Title. You can use strings too.
-        //getDialog().setTitle("使用者協議及隱私政策");
-        // If you want no title, use this code
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         findViews(view);
         return view;
     }
 	
 	private void findViews(View rootView) {
-		mTitle = (TextView) rootView.findViewById(R.id.title);
-		mIcon = (ImageView) rootView.findViewById(R.id.icon_error);
-		mBtn = (AppCompatButton) rootView.findViewById(R.id.confirm);
+		mTitle = rootView.findViewById(R.id.title);
+		mIcon = rootView.findViewById(R.id.icon_error);
+		mBtn = rootView.findViewById(R.id.confirm);
 	}
 	@Override
 	public void onResume() {

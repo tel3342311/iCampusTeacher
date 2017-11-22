@@ -1,4 +1,4 @@
-package com.liteon.icampusguardian.util;
+package com.liteon.com.icampusteacher.util;
 
 public class Def {
 	//SharePreference
