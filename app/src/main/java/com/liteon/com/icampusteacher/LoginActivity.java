@@ -1,18 +1,22 @@
 package com.liteon.com.icampusteacher;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.liteon.com.icampusteacher.util.CustomDialog;
+import com.liteon.com.icampusteacher.util.Utils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -21,9 +25,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPassword;
     private Button mLogin;
     private CustomDialog mErrorDialog;
-    private boolean isValidInput;
+    private boolean mIsValidInput;
     private String mAccountStr;
     private String mPasswordStr;
+    private TextView mforgetPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,17 +37,35 @@ public class LoginActivity extends AppCompatActivity {
         setListener();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAccountStr = mAccount.getText().toString();
+        mPasswordStr = mPassword.getText().toString();
+        if (checkInfoValid()) {
+            mLogin.setEnabled(true);
+        } else {
+            mLogin.setEnabled(false);
+        }
+    }
+
     private void findViews() {
 
         mAccount = findViewById(R.id.login_account);
         mPassword = findViewById(R.id.login_password);
         mLogin = findViewById(R.id.ap_login);
+        mforgetPassword = findViewById(R.id.forget_password);
     }
 
     private void setListener() {
         mAccount.addTextChangedListener(mAccountTextWatcher);
         mPassword.addTextChangedListener(mPasswordTextWatcher);
-        mLogin.setOnClickListener((v) -> new LoginTask().execute());
+        mLogin.setOnClickListener(v -> new LoginTask().execute());
+        mforgetPassword.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, UserResetPasswordActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -67,7 +90,12 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            mPasswordStr = editable.toString();
+            mAccountStr = editable.toString();
+            if (checkInfoValid()) {
+                mLogin.setEnabled(true);
+            } else {
+                mLogin.setEnabled(false);
+            }
         }
     };
 
@@ -84,45 +112,57 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            mAccountStr = editable.toString();
+            mPasswordStr = editable.toString();
+            if (checkInfoValid()) {
+                mLogin.setEnabled(true);
+            } else {
+                mLogin.setEnabled(false);
+            }
         }
     };
 
     class LoginTask extends AsyncTask<Void , String , Boolean> {
-
+        private String mErrorMsg;
         @Override
         protected Boolean doInBackground(Void... voids) {
             String account = mAccountStr;
             String password = mPasswordStr;
             Log.d(TAG, "Account: " + account + ", password : " + password);
 
-            if (isValidInput) {
+            if (!Utils.isNetworkConnectionAvailable()) {
+                mErrorMsg = getString(R.string.login_error_no_server_connection);
+                return false;
+            }
+
+            if (Utils.isEmailValid(account)) {
                 //call API
             } else {
+                mErrorMsg = getString(R.string.login_error_account_or_password);
                 return false;
             }
             return true;
         }
 
         @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
+        protected void onPostExecute(Boolean isLoginSuccess) {
 
-            if (aBoolean) {
+            if (isLoginSuccess) {
 
             } else {
-                showErrorDialog();
+                //showErrorDialog(mErrorMsg);
+                Utils.showErrorDialog(mErrorMsg);
             }
         }
     }
 
-    private void showErrorDialog() {
-        mErrorDialog = new CustomDialog();
-        mErrorDialog.setTitle(getString(R.string.login_error_account_or_password));
-        mErrorDialog.setIcon(R.drawable.ic_error_outline_black_24dp);
-        mErrorDialog.setBtnText(getString(R.string.login_ok));
-        mErrorDialog.setBtnConfirm(v -> mErrorDialog.dismiss());
-        mErrorDialog.show(getSupportFragmentManager(), "dialog_fragment");
-
+    private boolean checkInfoValid() {
+        if (!TextUtils.isEmpty(mAccountStr) && !TextUtils.isEmpty(mPasswordStr)) {
+            mIsValidInput = true;
+        } else {
+            mIsValidInput = false;
+        }
+        return mIsValidInput;
     }
+
+
 }

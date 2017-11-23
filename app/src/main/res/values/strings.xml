@@ -23,4 +23,13 @@
     <string name="login_no_network">Unable to connect to the internet</string>
     <string name="login_error_account_or_password">Invalid account (email) or password, please try again!</string>
     <string name="login_error_no_server_connection">Failed to connect to server. Please try again later!</string>
+    <!-- Forget Password -->
+    <string name="forget_reset_password">Reset your password</string>
+    <string name="forget_input_original_account">Please provide the email address that you used when you signed up for your account. We will send you an email to reset your password.</string>
+    <string name="forget_send">Submit</string>
+    <string name="forget_back_to_login">Back to Login</string>
+    <string name="forget_reset_done">Password reset confirmation</string>
+    <string name="forget_account_not_exist">Email address does not exist</string>
+    <string name="forget_check_mailbox_and_setup">Please check your email for continue the password reset process</string>
+
 </resources>
