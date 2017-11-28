@@ -8,6 +8,7 @@
     <string name="welcome_permission_term">Permission for school teacher to see your kid\'s sleeping information</string>
     <string name="welcome_accept">Accept</string>
     <string name="welcome_quit">Quit</string>
+    <string name="welcome_confirm">Confirm</string>
     <!--  login Page -->
     <string name="login_teacher_account">Login your account</string>
     <string name="login_account_info">第一次登入，請使用學校給予的帳號及密碼登錄，日後請至選單“老師資料設定”內修改</string>
@@ -31,5 +32,16 @@
     <string name="forget_reset_done">Password reset confirmation</string>
     <string name="forget_account_not_exist">Email address does not exist</string>
     <string name="forget_check_mailbox_and_setup">Please check your email for continue the password reset process</string>
+    <!-- bottom navigation view -->
+    <string name="my_class">My Class</string>
+    <string name="contact_matters">Contact Matters</string>
+    <string name="search">Search</string>
+    <!-- Drawer -->
+    <string name="teacher_info">Teacher Information</string>
+    <string name="app_info">App Information </string>
+    <string name="logout">Log out</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

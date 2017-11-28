@@ -70,4 +70,15 @@ public class Utils {
         dialog.show((App.getCurrnetActivity()).getSupportFragmentManager(), "dialog_fragment");
 
     }
+
+    public static void showErrorDialog(String message, View.OnClickListener listener) {
+
+        final CustomDialog dialog = new CustomDialog();
+        dialog.setTitle(message);
+        dialog.setIcon(R.drawable.ic_error_outline_black_24dp);
+        dialog.setBtnText(App.getContext().getString(R.string.login_ok));
+        dialog.setBtnConfirm(listener);
+        dialog.show((App.getCurrnetActivity()).getSupportFragmentManager(), "dialog_fragment");
+
+    }
 }

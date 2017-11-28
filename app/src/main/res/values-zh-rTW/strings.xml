@@ -9,6 +9,7 @@
     <string name="welcome_permission_term">學校老師可以獲得寶貝睡眠資訊</string>
     <string name="welcome_accept">同意</string>
     <string name="welcome_quit">退出</string>
+    <string name="welcome_confirm">確認</string>
     <!--  login Page -->
     <string name="login_teacher_account">請登入老師帳號</string>
     <string name="login_account_info">第一次登入，請使用學校給予的帳號及密碼登錄，日後請至選單“老師資料設定”內修改</string>
@@ -32,5 +33,13 @@
     <string name="forget_reset_done">系統已重設您的密碼</string>
     <string name="forget_account_not_exist">查無此登錄帳號(電子郵件)，請再確認!</string>
     <string name="forget_check_mailbox_and_setup">請查看信箱並使用系統寄出的聯結重新設定密碼</string>
+    <!-- bottom navigation view -->
+    <string name="my_class">我的班級</string>
+    <string name="contact_matters">聯絡事項</string>
+    <string name="search">搜 尋</string>
+    <!-- Drawer -->
+    <string name="teacher_info">老師資料設定</string>
+    <string name="app_info">App資訊與隱私設定</string>
+    <string name="logout">登 出</string>
 
 </resources>

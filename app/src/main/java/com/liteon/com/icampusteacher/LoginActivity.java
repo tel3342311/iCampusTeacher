@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.liteon.com.icampusteacher.util.CustomDialog;
 import com.liteon.com.icampusteacher.util.Utils;
 
+import io.reactivex.Flowable;
+
 public class LoginActivity extends AppCompatActivity {
 
     private String TAG = LoginActivity.class.getName();
@@ -62,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         mPassword.addTextChangedListener(mPasswordTextWatcher);
         mLogin.setOnClickListener(v -> new LoginTask().execute());
         mforgetPassword.setOnClickListener(v -> {
+
             Intent intent = new Intent();
             intent.setClass(LoginActivity.this, UserResetPasswordActivity.class);
             startActivity(intent);
@@ -163,6 +166,4 @@ public class LoginActivity extends AppCompatActivity {
         }
         return mIsValidInput;
     }
-
-
 }

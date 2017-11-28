@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_myclass"
+        android:enabled="true"
+        android:icon="@drawable/btn_myclass_btn_myclass"
+        android:title="@string/my_class" />
+    <item
+        android:id="@+id/action_contact"
+        android:enabled="true"
+        android:icon="@drawable/btn_myclass_btn_contact"
+        android:title="@string/contact_matters"/>
+    <item
+        android:id="@+id/action_search"
+        android:enabled="true"
+        android:icon="@drawable/btn_myclass_btn_search"
+        android:title="@string/search"/>
+
+</menu>
