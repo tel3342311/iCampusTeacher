@@ -23,7 +23,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".UserTermActivity" />
         <activity android:name=".UserResetPasswordActivity" />
-        <activity android:name=".LoadingPageActivity"></activity>
+        <activity android:name=".LoadingPageActivity" />
+        <activity android:name=".UserInfoActivity" />
     </application>
 
 </manifest>

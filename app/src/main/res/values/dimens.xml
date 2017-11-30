@@ -139,4 +139,5 @@
     <dimen name="wheel_content_size">24sp</dimen>
     <!-- User Info update -->
     <dimen name="password_hint_size">12sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

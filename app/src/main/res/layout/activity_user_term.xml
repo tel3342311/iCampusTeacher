@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,6 +11,9 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:titleTextAppearance="@style/Toolbar.TitleText">
 
         <ImageView
@@ -20,6 +23,7 @@
             android:layout_centerVertical="true"
             android:background="@drawable/ic_navigate_before_white_24dp"
             app:backgroundTint="@color/md_white_1000" />
+
         <TextView
             android:id="@+id/page_title"
             android:layout_width="wrap_content"
@@ -28,26 +32,46 @@
             android:layout_gravity="center"
             android:text="@string/welcome_user_term"
             android:textColor="@color/md_white_1000"
-            android:textSize="@dimen/page_title_text_size"/>
+            android:textSize="@dimen/page_title_text_size" />
 
     </android.support.v7.widget.Toolbar>
 
 
     <TextView
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:id="@+id/app_ver_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_below="@id/toolbar"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="8dp"
+        android:text="APP Version"
         android:textColor="@color/md_black_1000"
-        android:text="@string/welcome_user_term_content"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/app_ver_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/toolbar"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="8dp"
+        android:text="1.0"
+        android:textColor="@color/md_black_1000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <include
         android:id="@+id/bottom_bar"
+        layout="@layout/component_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/welcome_bottom_option_height"
-        layout="@layout/component_bottom"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/user_improve_plan"
@@ -55,6 +79,29 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_bar"
         android:layout_margin="@dimen/activity_vertical_margin"
-        android:text="@string/welcome_join_program" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/welcome_join_program"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="364dp"
+        android:layout_alignStart="@+id/user_improve_plan"
+        android:layout_below="@id/app_ver_title"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/welcome_user_term_content"
+        android:textColor="@color/md_black_1000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_ver_title" />
+
+
+</android.support.constraint.ConstraintLayout>

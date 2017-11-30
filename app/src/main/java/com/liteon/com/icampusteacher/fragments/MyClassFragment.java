@@ -3,9 +3,11 @@ package com.liteon.com.icampusteacher.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toolbar;
 
 import com.liteon.com.icampusteacher.R;
 
@@ -15,6 +17,12 @@ import com.liteon.com.icampusteacher.R;
  * create an instance of this fragment.
  */
 public class MyClassFragment extends Fragment {
+    private final static String TAG = MyClassFragment.class.getSimpleName();
+    private Toolbar mToolbar;
+    private RecyclerView mRecycleView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     public MyClassFragment() {
         // Required empty public constructor
     }
@@ -44,7 +52,19 @@ public class MyClassFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_class, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_my_class, container, false);
+        findViews(rootView);
+        initRecycleView();
+        return rootView;
     }
 
+    private void findViews(View rootView) {
+
+        mToolbar = rootView.findViewById(R.id.toolbar);
+        mRecycleView = rootView.findViewById(R.id.student_grid);
+    }
+
+    private void initRecycleView() {
+
+    }
 }

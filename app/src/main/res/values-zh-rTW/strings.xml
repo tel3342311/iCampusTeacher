@@ -41,5 +41,5 @@
     <string name="teacher_info">老師資料設定</string>
     <string name="app_info">App資訊與隱私設定</string>
     <string name="logout">登 出</string>
-
+    <string name="class_name">%s國小%s年%s班</string>
 </resources>
