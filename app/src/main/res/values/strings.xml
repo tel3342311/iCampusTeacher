@@ -41,9 +41,15 @@
     <string name="app_info">App Information </string>
     <string name="logout">Log out</string>
     <string name="class_name">%s國小%s年%s班</string>
-
+    <!-- Student Info -->
+    <string name="safty_enter_school">Arrive School</string>
+    <string name="safty_leave_school">Leave School</string>
+    <string name="icg_healthy">icg healthy</string>
+    <string name="student_position">student position</string>
+    <string name="report_absent">Report Student Info. Error</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_user_info">UserInfoActivity</string>
+
 
 </resources>

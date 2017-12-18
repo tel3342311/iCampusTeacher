@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         mClassName.setText(R.string.class_name);
     }
 
-    private void changeFragment(Fragment frag) {
+    public void changeFragment(Fragment frag) {
         mCurrentFragment = frag;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

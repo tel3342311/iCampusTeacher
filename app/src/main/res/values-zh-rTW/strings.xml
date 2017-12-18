@@ -42,4 +42,10 @@
     <string name="app_info">App資訊與隱私設定</string>
     <string name="logout">登 出</string>
     <string name="class_name">%s國小%s年%s班</string>
+    <!-- Student Info -->
+    <string name="safty_enter_school">到校</string>
+    <string name="safty_leave_school">離校</string>
+    <string name="icg_healthy">iCG健康</string>
+    <string name="student_position">學生位置</string>
+    <string name="report_absent">回報系統登記學生姓名，座號錯誤</string>
 </resources>

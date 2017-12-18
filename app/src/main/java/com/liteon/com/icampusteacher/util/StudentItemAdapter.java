@@ -15,6 +15,10 @@ public class StudentItemAdapter extends RecyclerView.Adapter<StudentItemAdapter.
 
     private List<StudentItem> mStudentList;
 
+    public StudentItemAdapter(List<StudentItem> list) {
+        mStudentList = list;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -23,7 +27,7 @@ public class StudentItemAdapter extends RecyclerView.Adapter<StudentItemAdapter.
         ViewHolder vh = new ViewHolder(v);
         vh.mStudentIcon = v.findViewById(R.id.student_icon);
         vh.mStudentName = v.findViewById(R.id.student_name);
-        return null;
+        return vh;
     }
 
     @Override
