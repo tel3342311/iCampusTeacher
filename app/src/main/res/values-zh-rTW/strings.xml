@@ -45,7 +45,47 @@
     <!-- Student Info -->
     <string name="safty_enter_school">到校</string>
     <string name="safty_leave_school">離校</string>
+    <string name="safty_no_watch_detected">未感應手錶</string>
     <string name="icg_healthy">iCG健康</string>
     <string name="student_position">學生位置</string>
     <string name="report_absent">回報系統登記學生姓名，座號錯誤</string>
+    <!-- healthy -->
+    <string name="healthy_today_reocrd">今日紀錄</string>
+    <string name="healthy_today_reocrd_not_update">今日紀錄(未更新)</string>
+    <string name="healthy_update_time">已於MM/dd hh:mm更新</string>
+    <string name="healthy_sync_failed">資料同步失敗</string>
+    <string name="healthy_sync">同步</string>
+    <string name="healthy_activity">活動指數</string>
+    <string name="healthy_steps">步數</string>
+    <string name="healthy_step">步</string>
+    <string name="healthy_carlories">燃燒卡路里</string>
+    <string name="healthy_cal">大卡</string>
+    <string name="healthy_walk">走路</string>
+    <string name="healthy_minutes">分</string>
+    <string name="healthy_running">跑步</string>
+    <string name="healthy_cycling">騎腳踏車</string>
+    <string name="healthy_avg_bpm">平均心率</string>
+    <string name="healthy_bpm">bpm</string>
+    <string name="healthy_sleep">睡眠</string>
+    <string name="healthy_wake">起床</string>
+    <string name="healthy_hour_mins">hh 時 mm 分</string>
+    <!-- Activities -->
+    <string name="activity">活動指數</string>
+    <string name="activity_very_bad">非常不好</string>
+    <string name="activity_bad">不好</string>
+    <string name="activity_normal">普通</string>
+    <string name="activity_good">好</string>
+    <string name="activity_excellent">非常好</string>
+    <string name="activity_last_7_days">近七天狀態</string>
+    <string name="activity_today">今天</string>
+    <string name="sleep_quality">睡眠品質</string>
+    <string name="sleep_quality_good">良好</string>
+    <string name="sleep_quality_normal">尚可</string>
+    <string name="sleep_quality_bad">不佳</string>
+    <string name="sleep_hours">小時</string>
+    <!-- Contact -->
+    <string name="delete">刪除</string>
+    <string name="edit">編輯</string>
+    <string name="delete_confirm">刪除聯絡事項</string>
+
 </resources>

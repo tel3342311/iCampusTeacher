@@ -20,6 +20,7 @@ public class Def {
 	public static final String SP_PHOTO_MAP_WATCH = "com.liteon.icampusguardian.SP_PHOTO_MAP_WATCH";
 	public static final String SP_GEO_ITEM_MAP = "com.liteon.icampusguardian.SP_GEO_ITEM_MAP";
 	public static final String SP_BT_WATCH_ADDRESS = "com.liteon.icampusguardian.SP_BT_WATCH_ADDRESS";
+	public static final String SP_CONTACT_LIST = "com.liteon.icampusguardian.SP_BT_WATCH_ADDRESS";
 
 	//RET CODE there are two kind of success code
 	public static final String RET_SUCCESS_1 = "SUC01";

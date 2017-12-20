@@ -49,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="vertical"
+            android:background="@color/md_grey_200"
             card_view:layout_constraintTop_toBottomOf="@id/guideline"/>
 
     </android.support.constraint.ConstraintLayout>

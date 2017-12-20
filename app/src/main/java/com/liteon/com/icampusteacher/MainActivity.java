@@ -19,8 +19,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.liteon.com.icampusteacher.fragments.ContactMatterFragment;
+import com.liteon.com.icampusteacher.fragments.HealthMainFragment;
 import com.liteon.com.icampusteacher.fragments.MyClassFragment;
 import com.liteon.com.icampusteacher.fragments.SearchFragment;
+import com.liteon.com.icampusteacher.fragments.StudentDetailFragment;
 import com.liteon.com.icampusteacher.util.Def;
 
 public class MainActivity extends AppCompatActivity {
@@ -144,5 +146,14 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container, frag);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mCurrentFragment instanceof HealthMainFragment) {
+            changeFragment(StudentDetailFragment.newInstance("", ""));
+            return;
+        }
+        super.onBackPressed();
     }
 }

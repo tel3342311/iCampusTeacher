@@ -4,17 +4,26 @@ package com.liteon.com.icampusteacher.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.MapView;
+import com.liteon.com.icampusteacher.MainActivity;
 import com.liteon.com.icampusteacher.R;
+import com.liteon.com.icampusteacher.util.HealthyItem;
+import com.liteon.com.icampusteacher.util.HealthyItemAdapter;
 
 import org.w3c.dom.Text;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +45,11 @@ public class StudentDetailFragment extends Fragment {
     private ImageView mPositionArrow;
     private MapView mMapView;
     private RecyclerView mHealthyList;
-
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mAdapter;
+    private HealthyItemAdapter.ViewHolder.IHealthViewHolderClicks mOnItemClickListener;
+    private static ArrayList<HealthyItem> myDataset = new ArrayList<>();
+    private int mCurrnetStudentIdx;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_STUDENT_NAME = "ARG_STUDENT_NAME";
@@ -88,6 +101,8 @@ public class StudentDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_student_detail, container, false);
         findViews(rootView);
+        setupListener();
+        initRecyclerView();
         return rootView;
     }
 
@@ -99,6 +114,7 @@ public class StudentDetailFragment extends Fragment {
         EnterSubView = mEnterToggle.findViewById(R.id.enter_item).findViewById(R.id.absent_report);
         HealthySubView = mHealthyList = mHealthyToggle.findViewById(R.id.healthy_item).findViewById(R.id.healthy_event_view);
         PositionSubView = mPositionToggle.findViewById(R.id.position_item).findViewById(R.id.map_frame);
+
         mMapView = mPositionToggle.findViewById(R.id.position_item).findViewById(R.id.map_view);
 
         mEnterArrow = mEnterToggle.findViewById(R.id.enter_item).findViewById(R.id.imageView2);
@@ -107,5 +123,106 @@ public class StudentDetailFragment extends Fragment {
 
     }
 
+    private void setupListener() {
+        mEnterToggle.setOnClickListener(v -> {
+            if (EnterSubView.getVisibility() == View.VISIBLE) {
+                EnterSubView.setVisibility(View.GONE);
+            } else {
+                EnterSubView.setVisibility(View.VISIBLE);
+            }
 
+        });
+
+        mHealthyToggle.setOnClickListener(v -> {
+            if (HealthySubView.getVisibility() == View.VISIBLE) {
+                HealthySubView.setVisibility(View.GONE);
+            } else {
+                HealthySubView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mPositionToggle.setOnClickListener(v -> {
+            if (PositionSubView.getVisibility() == View.VISIBLE) {
+                PositionSubView.setVisibility(View.GONE);
+            } else {
+                PositionSubView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mOnItemClickListener = type -> ((MainActivity)getActivity()).changeFragment(HealthMainFragment.newInstance(type.ordinal()));
+    }
+
+    private void initRecyclerView() {
+        mHealthyList.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mHealthyList.setLayoutManager(mLayoutManager);
+        testData();
+        mAdapter = new HealthyItemAdapter(myDataset, mOnItemClickListener);
+        mHealthyList.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EnterSubView.setVisibility(View.GONE);
+        HealthySubView.setVisibility(View.GONE);
+        PositionSubView.setVisibility(View.GONE);
+
+    }
+
+    private void testData() {
+        if (myDataset.size() == 0) {
+            for (HealthyItem.TYPE type : HealthyItem.TYPE.values()) {
+                HealthyItem item = new HealthyItem();
+                item.setItemType(type);
+                item.setValue(getTestValue(type, mCurrnetStudentIdx));
+                myDataset.add(item);
+            }
+        }
+    }
+
+    private int getTestValue(HealthyItem.TYPE type, int idx) {
+        if (idx == 0) {
+            switch(type){
+
+                case ACTIVITY:
+                    return 85;
+                case CALORIES_BURNED:
+                    return 1060;
+                case TOTAL_STEPS:
+                    return 7600;
+                case WALKING_TIME:
+                    return 25;
+                case RUNNING_TIME:
+                    return 40;
+                case CYCLING_TIME:
+                    return 15;
+                case HEART_RATE:
+                    return 81;
+                case SLEEP_TIME:
+                    return 560;
+            }
+        } else {
+            switch(type){
+
+                case ACTIVITY:
+                    return 76;
+                case CALORIES_BURNED:
+                    return 830;
+                case TOTAL_STEPS:
+                    return 6400;
+                case WALKING_TIME:
+                    return 23;
+                case RUNNING_TIME:
+                    return 25;
+                case CYCLING_TIME:
+                    return 15;
+                case HEART_RATE:
+                    return 85;
+                case SLEEP_TIME:
+                    return 530;
+            }
+        }
+        return 0;
+    }
 }

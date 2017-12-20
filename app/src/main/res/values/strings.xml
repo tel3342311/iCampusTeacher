@@ -44,12 +44,49 @@
     <!-- Student Info -->
     <string name="safty_enter_school">Arrive School</string>
     <string name="safty_leave_school">Leave School</string>
+    <string name="safty_no_watch_detected">No scanned data</string>
     <string name="icg_healthy">icg healthy</string>
     <string name="student_position">student position</string>
     <string name="report_absent">Report Student Info. Error</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_user_info">UserInfoActivity</string>
-
-
+    <!-- healthy -->
+    <string name="healthy_today_reocrd">Health Summary</string>
+    <string name="healthy_today_reocrd_not_update">Health Summary(Not Synced)</string>
+    <string name="healthy_update_time">\'Updated\' MM/dd hh:mm</string>
+    <string name="healthy_sync_failed">Data sync failed</string>
+    <string name="healthy_sync">Sync</string>
+    <string name="healthy_activity">PFI</string>
+    <string name="healthy_steps">Steps</string>
+    <string name="healthy_step">Steps</string>
+    <string name="healthy_carlories">Calories Burned</string>
+    <string name="healthy_cal">Kcal</string>
+    <string name="healthy_walk">Walking</string>
+    <string name="healthy_minutes">Mins</string>
+    <string name="healthy_running">Running</string>
+    <string name="healthy_cycling">Cycling</string>
+    <string name="healthy_avg_bpm">Heart Rate</string>
+    <string name="healthy_bpm">bpm</string>
+    <string name="healthy_sleep">Sleep</string>
+    <string name="healthy_wake">Wake</string>
+    <string name="healthy_hour_mins">hh \'Hrs\' mm \'Mins\'</string>
+    <!-- Activities -->
+    <string name="activity">PFI</string>
+    <string name="activity_very_bad">Poor</string>
+    <string name="activity_bad">Not good</string>
+    <string name="activity_normal">Average</string>
+    <string name="activity_good">Good</string>
+    <string name="activity_excellent">Excellent</string>
+    <string name="activity_last_7_days">7 days</string>
+    <string name="activity_today">Today</string>
+    <string name="sleep_quality">Sleep Quality</string>
+    <string name="sleep_quality_good">Good</string>
+    <string name="sleep_quality_normal">Ok</string>
+    <string name="sleep_quality_bad">bad</string>
+    <string name="sleep_hours">Hours</string>
+    <!-- Contact -->
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="delete_confirm">Delete</string>
 </resources>

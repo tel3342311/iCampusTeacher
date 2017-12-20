@@ -1,13 +1,46 @@
 package com.liteon.com.icampusteacher.fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.liteon.com.icampusteacher.App;
 import com.liteon.com.icampusteacher.R;
+import com.liteon.com.icampusteacher.util.ConfirmDeleteDialog;
+import com.liteon.com.icampusteacher.util.ContactItem;
+import com.liteon.com.icampusteacher.util.ContactItemAdapter;
+import com.liteon.com.icampusteacher.util.Def;
+import com.liteon.com.icampusteacher.util.HealthyItemAdapter;
+
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +49,21 @@ import com.liteon.com.icampusteacher.R;
  */
 public class ContactMatterFragment extends Fragment {
 
+    private RecyclerView mContactList;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mAdapter;
+    private ImageView mCancel;
+    private ImageView mConfirm;
+    private TextView mDateTitle;
+    private EditText mInputField;
+    private List<ContactItem> mContactItems;
+    private ContactItem mCurrentItem;
+    private ContactItemAdapter.ViewHolder.IHealthViewHolderClicks mOnItemClickListener;
+    private BottomSheetBehavior bottomSheetBehavior;
+    private Button mDelete;
+    private Button mEdit;
+    private View mSepLine;
+    private ConfirmDeleteDialog mConfirmDialog;
     public ContactMatterFragment() {
         // Required empty public constructor
     }
@@ -39,7 +87,197 @@ public class ContactMatterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contact_matter, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_contact_matter, container, false);
+        findViews(rootView);
+        setListener();
+        return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        restoreData();
+        resetItemToday();
+        setRecyclerView();
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    private void resetItemToday() {
+        Date date = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE HH:mm");
+        String currentDate = sdf.format(date);
+        mDateTitle.setText(currentDate);
+        mCurrentItem = new ContactItem();
+        mCurrentItem.setDate(currentDate);
+        mCurrentItem.setTime(date.getTime());
+        mCurrentItem.setContent("");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveData();
+    }
+
+    private void findViews(View rootView) {
+        mCancel = rootView.findViewById(R.id.btn_cancel);
+        mConfirm = rootView.findViewById(R.id.btn_confirm);
+        mDateTitle = rootView.findViewById(R.id.date_title);
+        mContactList = rootView.findViewById(R.id.list_contact);
+        mInputField =rootView.findViewById(R.id.matter_input);
+        bottomSheetBehavior = BottomSheetBehavior.from(rootView.findViewById(R.id.bottom_sheet_layout));
+        mDelete = rootView.findViewById(R.id.delete);
+        mEdit = rootView.findViewById(R.id.edit);
+        mSepLine = rootView.findViewById(R.id.sep_line);
+    }
+
+    private void restoreData() {
+        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+        String listStr = sp.getString(Def.SP_CONTACT_LIST, "");
+        Gson gson = new GsonBuilder().create();
+        Type typeOfList = new TypeToken<List<ContactItem>>() { }.getType();
+        mContactItems = gson.fromJson(listStr, typeOfList);
+        if (mContactItems == null) {
+            mContactItems = new ArrayList<>();
+        }
+    }
+
+    private void saveData() {
+        Gson gson = new Gson();
+        String input = gson.toJson(mContactItems);
+        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(Def.SP_CONTACT_LIST, input);
+        editor.commit();
+    }
+
+    private void setListener() {
+        mCancel.setOnClickListener(v -> {
+            mInputField.setText("");
+            mCancel.setEnabled(false);
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mInputField.getWindowToken(), 0);
+            resetItemToday();
+        });
+
+        mConfirm.setOnClickListener( v -> {
+            String content = mInputField.getText().toString();
+            Date date = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE HH:mm");
+            String currentDate = sdf.format(date);
+            mCurrentItem.setContent(content);
+            mCurrentItem.setDate(currentDate);
+            mCurrentItem.setTime(date.getTime());
+            mInputField.setText("");
+            mCancel.setEnabled(false);
+            mConfirm.setEnabled(false);
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mInputField.getWindowToken(), 0);
+            if (mContactItems.indexOf(mCurrentItem) == -1) {
+                mContactItems.add(0, mCurrentItem);
+            } else {
+                mContactItems.remove(mCurrentItem);
+                mContactItems.add(0, mCurrentItem);
+            }
+            resetItemToday();
+            mAdapter.notifyDataSetChanged();
+        });
+
+        mInputField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mCancel.setEnabled(true);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+                if (TextUtils.isEmpty(input) || TextUtils.equals(mCurrentItem.getContent(), input)) {
+                    mConfirm.setEnabled(false);
+                } else {
+                    mConfirm.setEnabled(true);
+                    mConfirm.setVisibility(View.VISIBLE);
+                    Date date = Calendar.getInstance().getTime();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE HH:mm");
+                    String currentDate = sdf.format(date);
+                    mDateTitle.setText(currentDate);
+                }
+            }
+        });
+
+        mOnItemClickListener = item -> {
+            mCurrentItem = item;
+            mDateTitle.setText(mCurrentItem.getDate());
+            mInputField.setText(mCurrentItem.getContent());
+            mConfirm.setVisibility(View.INVISIBLE);
+            mConfirm.setEnabled(false);
+            mContactList.setVisibility(View.GONE);
+            mSepLine.setVisibility(View.GONE);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        };
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    mContactList.setVisibility(View.VISIBLE);
+                    mSepLine.setVisibility(View.VISIBLE);
+                } else if (newState == BottomSheetBehavior.STATE_EXPANDED){
+                    mContactList.setVisibility(View.GONE);
+                    mSepLine.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+        mDelete.setOnClickListener(v -> {
+            showConfirmDialog();
+        });
+
+        mEdit.setOnClickListener(v -> {
+            mConfirm.setVisibility(View.VISIBLE);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            mContactList.setVisibility(View.VISIBLE);
+            mSepLine.setVisibility(View.VISIBLE);
+        });
+    }
+
+    private void setRecyclerView() {
+        mContactList.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mContactList.setLayoutManager(mLayoutManager);
+        mAdapter = new ContactItemAdapter(mContactItems, mOnItemClickListener);
+        mContactList.setAdapter(mAdapter);
+    }
+
+    private void showConfirmDialog() {
+        mConfirmDialog = new ConfirmDeleteDialog();
+        mConfirmDialog.setOnConfirmEventListener(v -> {
+            if (mCurrentItem != null && mContactItems.indexOf(mCurrentItem) != -1) {
+                mContactItems.remove(mCurrentItem);
+                resetItemToday();
+                mInputField.setText("");
+                mAdapter.notifyDataSetChanged();
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                mConfirmDialog.dismiss();
+            }
+        });
+        mConfirmDialog.setmOnCancelListener(v -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            mConfirmDialog.dismiss();
+        });
+        mConfirmDialog.setmTitleText(getString(R.string.delete_confirm) + "\n" + mCurrentItem.getDate());
+        mConfirmDialog.setmBtnConfirmText(getString(android.R.string.ok));
+        mConfirmDialog.setmBtnCancelText(getString(android.R.string.cancel));
+        mConfirmDialog.show(getActivity().getSupportFragmentManager(), "dialog_fragment");
+    }
 }
