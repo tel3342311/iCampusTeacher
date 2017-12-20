@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.liteon.com.icampusteacher.R;
 import com.liteon.com.icampusteacher.util.Def;
@@ -32,6 +35,9 @@ public class DailyHealthFragment extends Fragment {
 	private HealthPieChartView mPiechartView;
 	private TYPE mType;
 	private int mCurrnetStudentIdx;
+	private Toolbar mToolbar;
+	private TextView mTitleView;
+	private DrawerLayout mDrawerLayout;
 
 	public DailyHealthFragment(HealthyItem.TYPE type) {
 		mType = type;

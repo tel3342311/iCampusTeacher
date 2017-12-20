@@ -21,6 +21,8 @@ public class Def {
 	public static final String SP_GEO_ITEM_MAP = "com.liteon.icampusguardian.SP_GEO_ITEM_MAP";
 	public static final String SP_BT_WATCH_ADDRESS = "com.liteon.icampusguardian.SP_BT_WATCH_ADDRESS";
 	public static final String SP_CONTACT_LIST = "com.liteon.icampusguardian.SP_BT_WATCH_ADDRESS";
+	public static final String SP_STUDENT_ID = "com.liteon.icampusguardian.SP_STUDENT_ID";
+	public static final String SP_STUDENT_NAME = "com.liteon.icampusguardian.SP_STUDENT_ID";
 
 	//RET CODE there are two kind of success code
 	public static final String RET_SUCCESS_1 = "SUC01";
@@ -83,11 +85,15 @@ public class Def {
 	//API 33 reset password
 	public static final String REQUEST_PASSWORD_REST = "PasswordResetRequest";
 	public static final String KEY_USER_ROLE = "user_role";
-
+	public static final String KEY_PROFILE_NAME = "profile_name";
+	public static final String KEY_MOBILE_NUMBER = "mobile_number";
 	//API 36 get user detail
 	public static final String REQUEST_USER_DETAIL = "UserDetails";
 	//API 36 GrantTeacherAccessToSleepData
     public static final String REQUEST_GRANT_TEDETAIL = "GrantTeacherAccessToSleepData";
+    public static final String REQUEST_CREATE_REMINDER = "ClassRemindersCreate";
+	public static final String REQUEST_VIEW_REMINDER = "ClassRemindersList";
+	public static final String REQUEST_DELETE_REMINDER = "ClassRemindersDelete";
 	//EVENT ID LIST
 	public static final String EVENT_ID_ENTER_SCHOOL = "1";
 	public static final String EVENT_ID_LEAVE_SCHOOL = "2";

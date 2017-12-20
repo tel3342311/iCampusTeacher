@@ -64,6 +64,9 @@ public class HealthMainFragment extends Fragment implements IHealthViewHolderCli
         mRootView = inflater.inflate(R.layout.fragment_healthy_main, container, false);
         findViews();
         setupViewPager();
+        mTitleView.setText(mViewPager.getAdapter().getPageTitle(0));
+        mToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
+        mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         return mRootView;
     }
 

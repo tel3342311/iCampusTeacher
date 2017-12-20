@@ -4,15 +4,19 @@ package com.liteon.com.icampusteacher.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.input.InputManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,18 +30,23 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.liteon.com.icampusteacher.App;
+import com.liteon.com.icampusteacher.LoginActivity;
 import com.liteon.com.icampusteacher.R;
+import com.liteon.com.icampusteacher.db.DBHelper;
 import com.liteon.com.icampusteacher.util.ConfirmDeleteDialog;
 import com.liteon.com.icampusteacher.util.ContactItem;
 import com.liteon.com.icampusteacher.util.ContactItemAdapter;
 import com.liteon.com.icampusteacher.util.Def;
+import com.liteon.com.icampusteacher.util.GuardianApiClient;
 import com.liteon.com.icampusteacher.util.HealthyItemAdapter;
+import com.liteon.com.icampusteacher.util.JSONResponse;
 
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -56,14 +65,18 @@ public class ContactMatterFragment extends Fragment {
     private ImageView mConfirm;
     private TextView mDateTitle;
     private EditText mInputField;
-    private List<ContactItem> mContactItems;
-    private ContactItem mCurrentItem;
+    private List<JSONResponse.Contents> mContactItems;
+    private JSONResponse.Contents mCurrentItem;
     private ContactItemAdapter.ViewHolder.IHealthViewHolderClicks mOnItemClickListener;
     private BottomSheetBehavior bottomSheetBehavior;
     private Button mDelete;
     private Button mEdit;
     private View mSepLine;
     private ConfirmDeleteDialog mConfirmDialog;
+    private Toolbar mToolbar;
+    private DrawerLayout mDrawer;
+    private TextView mTitleView;
+    private DBHelper mDbHelper;
     public ContactMatterFragment() {
         // Required empty public constructor
     }
@@ -90,6 +103,8 @@ public class ContactMatterFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_contact_matter, container, false);
         findViews(rootView);
         setListener();
+        mTitleView.setText(R.string.contact_matters);
+        mDbHelper = DBHelper.getInstance(getActivity());
         return rootView;
     }
 
@@ -107,10 +122,9 @@ public class ContactMatterFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE HH:mm");
         String currentDate = sdf.format(date);
         mDateTitle.setText(currentDate);
-        mCurrentItem = new ContactItem();
-        mCurrentItem.setDate(currentDate);
-        mCurrentItem.setTime(date.getTime());
-        mCurrentItem.setContent("");
+        mCurrentItem = new JSONResponse.Contents();
+        mCurrentItem.setCreated_date(currentDate);
+        mCurrentItem.setComments("");
     }
 
     @Override
@@ -129,29 +143,36 @@ public class ContactMatterFragment extends Fragment {
         mDelete = rootView.findViewById(R.id.delete);
         mEdit = rootView.findViewById(R.id.edit);
         mSepLine = rootView.findViewById(R.id.sep_line);
+        mToolbar = getActivity().findViewById(R.id.toolbar);
+        mTitleView = getActivity().findViewById(R.id.toolbar_title);
+        mDrawer = getActivity().findViewById(R.id.drawer_layout);
     }
 
     private void restoreData() {
-        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
-        String listStr = sp.getString(Def.SP_CONTACT_LIST, "");
-        Gson gson = new GsonBuilder().create();
-        Type typeOfList = new TypeToken<List<ContactItem>>() { }.getType();
-        mContactItems = gson.fromJson(listStr, typeOfList);
-        if (mContactItems == null) {
-            mContactItems = new ArrayList<>();
-        }
+//        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+//        String listStr = sp.getString(Def.SP_CONTACT_LIST, "");
+//        Gson gson = new GsonBuilder().create();
+//        Type typeOfList = new TypeToken<List<ContactItem>>() { }.getType();
+//        mContactItems = gson.fromJson(listStr, typeOfList);
+//        if (mContactItems == null) {
+//            mContactItems = new ArrayList<>();
+//        }
+        mContactItems = mDbHelper.queryReminderData(mDbHelper.getReadableDatabase());
     }
 
     private void saveData() {
-        Gson gson = new Gson();
-        String input = gson.toJson(mContactItems);
-        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(Def.SP_CONTACT_LIST, input);
-        editor.commit();
+//        Gson gson = new Gson();
+//        String input = gson.toJson(mContactItems);
+//        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sp.edit();
+//        editor.putString(Def.SP_CONTACT_LIST, input);
+//        editor.commit();
     }
 
     private void setListener() {
+        mToolbar.setNavigationIcon(R.drawable.ic_dehaze_white_24dp);
+        mToolbar.setNavigationOnClickListener(v -> mDrawer.openDrawer(Gravity.LEFT));
+
         mCancel.setOnClickListener(v -> {
             mInputField.setText("");
             mCancel.setEnabled(false);
@@ -165,22 +186,11 @@ public class ContactMatterFragment extends Fragment {
             Date date = Calendar.getInstance().getTime();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE HH:mm");
             String currentDate = sdf.format(date);
-            mCurrentItem.setContent(content);
-            mCurrentItem.setDate(currentDate);
-            mCurrentItem.setTime(date.getTime());
+            mCurrentItem.setComments(content);
+            mCurrentItem.setCreated_date(currentDate);
             mInputField.setText("");
-            mCancel.setEnabled(false);
-            mConfirm.setEnabled(false);
-            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(mInputField.getWindowToken(), 0);
-            if (mContactItems.indexOf(mCurrentItem) == -1) {
-                mContactItems.add(0, mCurrentItem);
-            } else {
-                mContactItems.remove(mCurrentItem);
-                mContactItems.add(0, mCurrentItem);
-            }
-            resetItemToday();
-            mAdapter.notifyDataSetChanged();
+            new CreateReminderTask().execute(mCurrentItem);
+
         });
 
         mInputField.addTextChangedListener(new TextWatcher() {
@@ -197,7 +207,7 @@ public class ContactMatterFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 String input = editable.toString();
-                if (TextUtils.isEmpty(input) || TextUtils.equals(mCurrentItem.getContent(), input)) {
+                if (TextUtils.isEmpty(input) || TextUtils.equals(mCurrentItem.getComments(), input)) {
                     mConfirm.setEnabled(false);
                 } else {
                     mConfirm.setEnabled(true);
@@ -212,8 +222,8 @@ public class ContactMatterFragment extends Fragment {
 
         mOnItemClickListener = item -> {
             mCurrentItem = item;
-            mDateTitle.setText(mCurrentItem.getDate());
-            mInputField.setText(mCurrentItem.getContent());
+            mDateTitle.setText(mCurrentItem.getCreated_date());
+            mInputField.setText(mCurrentItem.getComments());
             mConfirm.setVisibility(View.INVISIBLE);
             mConfirm.setEnabled(false);
             mContactList.setVisibility(View.GONE);
@@ -262,22 +272,104 @@ public class ContactMatterFragment extends Fragment {
     private void showConfirmDialog() {
         mConfirmDialog = new ConfirmDeleteDialog();
         mConfirmDialog.setOnConfirmEventListener(v -> {
-            if (mCurrentItem != null && mContactItems.indexOf(mCurrentItem) != -1) {
-                mContactItems.remove(mCurrentItem);
-                resetItemToday();
-                mInputField.setText("");
-                mAdapter.notifyDataSetChanged();
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                mConfirmDialog.dismiss();
-            }
+            new DeleteItemTask().execute(mCurrentItem);
+            mConfirmDialog.dismiss();
         });
         mConfirmDialog.setmOnCancelListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             mConfirmDialog.dismiss();
         });
-        mConfirmDialog.setmTitleText(getString(R.string.delete_confirm) + "\n" + mCurrentItem.getDate());
+        mConfirmDialog.setmTitleText(getString(R.string.delete_confirm) + "\n" + mCurrentItem.getCreated_date());
         mConfirmDialog.setmBtnConfirmText(getString(android.R.string.ok));
         mConfirmDialog.setmBtnCancelText(getString(android.R.string.cancel));
         mConfirmDialog.show(getActivity().getSupportFragmentManager(), "dialog_fragment");
+    }
+
+    class DeleteItemTask extends AsyncTask<JSONResponse.Contents, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(JSONResponse.Contents... contents) {
+            JSONResponse.Contents item = contents[0];
+            GuardianApiClient apiClient = GuardianApiClient.getInstance(getActivity());
+            if (!TextUtils.isEmpty(item.getReminder_id())) {
+                JSONResponse response = apiClient.deleteReminder(item.getReminder_id());
+                if (TextUtils.equals(Def.RET_SUCCESS_1, response.getReturn().getResponseSummary().getStatusCode())){
+                    mDbHelper.deleteReminderById(mDbHelper.getWritableDatabase(), item.getReminder_id());
+                    if (item != null && mContactItems.indexOf(item) != -1) {
+                        mContactItems.remove(item);
+                        return true;
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            resetItemToday();
+            mInputField.setText("");
+            mAdapter.notifyDataSetChanged();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            if (aBoolean.booleanValue() == false) {
+                //show sync failed
+            }
+        }
+    }
+
+    class CreateReminderTask extends AsyncTask<JSONResponse.Contents, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(JSONResponse.Contents... contents) {
+            JSONResponse.Contents item = contents[0];
+            GuardianApiClient apiClient = GuardianApiClient.getInstance(getActivity());
+            JSONResponse response = apiClient.createReminder(item.getComments(), item.getReminder_id());
+            if (TextUtils.equals(response.getReturn().getResponseSummary().getStatusCode(), Def.RET_SUCCESS_1)){
+                if (TextUtils.isEmpty(item.getReminder_id())) {
+                    //New Item, Sync data again
+                    JSONResponse response_reminder = apiClient.getReminders();
+                    if (TextUtils.equals(response_reminder.getReturn().getResponseSummary().getStatusCode(), Def.RET_SUCCESS_1)) {
+                        List<JSONResponse.Contents> reminderList = Arrays.asList(response_reminder.getReturn().getResults().getReminders()[0].getContents());
+                        List<JSONResponse.Contents> newList = new ArrayList<>();
+                        for (JSONResponse.Contents newItem : reminderList){
+                            boolean isExist = false;
+                            for (JSONResponse.Contents originItem : mContactItems){
+                                if (TextUtils.equals(newItem.getReminder_id(), originItem.getReminder_id())){
+                                    isExist = true;
+                                    break;
+                                }
+                            }
+                            if (!isExist) {
+                                newList.add(0, newItem);
+                            }
+                        }
+                        if (newList.size() > 0) {
+                            mContactItems.addAll(newList);
+                            mDbHelper.insertReminderList(mDbHelper.getWritableDatabase(), newList);
+                        }
+                    }
+                } else {
+                    if (mContactItems.indexOf(item) != -1) {
+                        mDbHelper.updateReminderById(mDbHelper.getWritableDatabase(), item);
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            mCancel.setEnabled(false);
+            mConfirm.setEnabled(false);
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mInputField.getWindowToken(), 0);
+            resetItemToday();
+            mAdapter.notifyDataSetChanged();
+            if (aBoolean.booleanValue() == false) {
+                //show sync failed
+            }
+        }
     }
 }

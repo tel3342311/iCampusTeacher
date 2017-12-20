@@ -24,6 +24,7 @@ import com.liteon.com.icampusteacher.fragments.MyClassFragment;
 import com.liteon.com.icampusteacher.fragments.SearchFragment;
 import com.liteon.com.icampusteacher.fragments.StudentDetailFragment;
 import com.liteon.com.icampusteacher.util.Def;
+import com.liteon.com.icampusteacher.util.GuardianApiClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -89,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Log out
         mLogoutButton.setOnClickListener(v -> {
+            SharedPreferences sp = getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.remove(Def.SP_LOGIN_TOKEN);
+            editor.commit();
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -122,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences sp = getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
-        String token = sp.getString(Def.SP_LOGIN_TOKEN, "AA");
+        String token = sp.getString(Def.SP_LOGIN_TOKEN, "");
         if (sp.getInt(Def.SP_USER_TERM_READ, 0) == 0) {
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, WelcomeActivity.class);
@@ -137,7 +142,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             mIsFirstLaunch = false;
         }
+        GuardianApiClient apiClient = GuardianApiClient.getInstance(this);
+        apiClient.setToken(token);
         mClassName.setText(R.string.class_name);
+        changeFragment(MyClassFragment.newInstance());
     }
 
     public void changeFragment(Fragment frag) {
@@ -151,7 +159,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (mCurrentFragment instanceof HealthMainFragment) {
-            changeFragment(StudentDetailFragment.newInstance("", ""));
+            SharedPreferences sp = getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+            String studentName = sp.getString(Def.SP_STUDENT_NAME, "");
+            String studentId = sp.getString(Def.SP_STUDENT_ID, "");
+            changeFragment(StudentDetailFragment.newInstance(studentName, studentId));
             return;
         }
         super.onBackPressed();

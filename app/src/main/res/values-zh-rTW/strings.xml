@@ -87,5 +87,13 @@
     <string name="delete">刪除</string>
     <string name="edit">編輯</string>
     <string name="delete_confirm">刪除聯絡事項</string>
+    <string name="register_name">電子郵件</string>
+    <string name="original_password">原密碼</string>
+    <string name="register_password">如有更改密碼將重新登入，請記住新密碼</string>
+    <string name="password_hint">如有更改密碼將重新登入，請記住新密碼</string>
+    <string name="confirm_new_password">新密碼(至少八碼英文或數字)</string>
+    <string name="confirm_new_password_again">再次確認新密碼</string>
+    <string name="alarm_sync_complete">同步完成</string>
+    <string name="alarm_syncing">同步中</string>
 
 </resources>

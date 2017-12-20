@@ -13,9 +13,9 @@ import java.util.List;
 
 public class StudentItemAdapter extends RecyclerView.Adapter<StudentItemAdapter.ViewHolder> {
 
-    private List<StudentItem> mStudentList;
+    private List<JSONResponse.Student> mStudentList;
 
-    public StudentItemAdapter(List<StudentItem> list) {
+    public StudentItemAdapter(List<JSONResponse.Student> list) {
         mStudentList = list;
     }
 
@@ -27,14 +27,16 @@ public class StudentItemAdapter extends RecyclerView.Adapter<StudentItemAdapter.
         ViewHolder vh = new ViewHolder(v);
         vh.mStudentIcon = v.findViewById(R.id.student_icon);
         vh.mStudentName = v.findViewById(R.id.student_name);
+        vh.mStudentId = v.findViewById(R.id.student_id);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        StudentItem item = mStudentList.get(position);
-        holder.mStudentName.setText(item.getNickname());
+        JSONResponse.Student item = mStudentList.get(position);
+        holder.mStudentName.setText(item.getName());
+        holder.mStudentId.setText(item.getRoll_no());
     }
 
     @Override
@@ -46,6 +48,7 @@ public class StudentItemAdapter extends RecyclerView.Adapter<StudentItemAdapter.
         public View mRootView;
         public ImageView mStudentIcon;
         public TextView mStudentName;
+        public TextView mStudentId;
         public ViewHolder(View itemView) {
             super(itemView);
             mRootView = itemView;

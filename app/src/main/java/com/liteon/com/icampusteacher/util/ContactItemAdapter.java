@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ContactItemAdapter extends RecyclerView.Adapter<ContactItemAdapter.ViewHolder> {
 
-    private List<ContactItem> mDataset;
+    private List<JSONResponse.Contents> mDataset;
     private WeakReference<ViewHolder.IHealthViewHolderClicks> mClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -23,7 +23,7 @@ public class ContactItemAdapter extends RecyclerView.Adapter<ContactItemAdapter.
         public TextView mTitleTextView;
         public TextView mValueTextView;
         public WeakReference<IHealthViewHolderClicks> mClicks;
-        public ContactItem mItem;
+        public JSONResponse.Contents mItem;
         public ViewHolder(View v, IHealthViewHolderClicks itemClickListener) {
             super(v);
             mRootView = v;
@@ -38,11 +38,11 @@ public class ContactItemAdapter extends RecyclerView.Adapter<ContactItemAdapter.
         }
 
         public interface IHealthViewHolderClicks {
-            void onClick(ContactItem item);
+            void onClick(JSONResponse.Contents item);
         }
     }
 
-    public ContactItemAdapter(List<ContactItem> contactDataset, ViewHolder.IHealthViewHolderClicks ItemClickListener) {
+    public ContactItemAdapter(List<JSONResponse.Contents> contactDataset, ViewHolder.IHealthViewHolderClicks ItemClickListener) {
         mDataset = contactDataset;
         mClickListener = new WeakReference<>(ItemClickListener);
     }
@@ -54,9 +54,9 @@ public class ContactItemAdapter extends RecyclerView.Adapter<ContactItemAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ContactItem item = mDataset.get(position);
-        holder.mTitleTextView.setText(item.getDate());
-        holder.mValueTextView.setText(item.getContent());
+        JSONResponse.Contents item = mDataset.get(position);
+        holder.mTitleTextView.setText(item.getCreated_date());
+        holder.mValueTextView.setText(item.getComments());
         holder.mItem = item;
     }
 

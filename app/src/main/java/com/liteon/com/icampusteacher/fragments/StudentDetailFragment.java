@@ -12,13 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.maps.MapView;
 import com.liteon.com.icampusteacher.MainActivity;
 import com.liteon.com.icampusteacher.R;
+import com.liteon.com.icampusteacher.db.DBHelper;
 import com.liteon.com.icampusteacher.util.HealthyItem;
 import com.liteon.com.icampusteacher.util.HealthyItemAdapter;
+import com.liteon.com.icampusteacher.util.JSONResponse;
 
 import org.w3c.dom.Text;
 
@@ -44,22 +48,22 @@ public class StudentDetailFragment extends Fragment {
     private ImageView mHealthyArrow;
     private ImageView mPositionArrow;
     private MapView mMapView;
+    private TextView mStudentIdView;
     private RecyclerView mHealthyList;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
     private HealthyItemAdapter.ViewHolder.IHealthViewHolderClicks mOnItemClickListener;
     private static ArrayList<HealthyItem> myDataset = new ArrayList<>();
-    private int mCurrnetStudentIdx;
-
+    private JSONResponse.Student mStudent;
+    private DBHelper mDbHelper;
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_STUDENT_NAME = "ARG_STUDENT_NAME";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_STUDENT_ID = "ARG_STUDENT_ID";
 
-    // TODO: Rename and change types of parameters
     private String mStudentName;
-    private String mParam2;
-
-
+    private String mStudentId;
+    private android.support.v7.widget.Toolbar mToolbar;
+    private TextView mTitleView;
     public StudentDetailFragment() {
         // Required empty public constructor
     }
@@ -77,7 +81,7 @@ public class StudentDetailFragment extends Fragment {
         StudentDetailFragment fragment = new StudentDetailFragment();
         Bundle args = new Bundle();
         args.putString(ARG_STUDENT_NAME, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_STUDENT_ID, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,10 +91,11 @@ public class StudentDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mStudentName = getArguments().getString(ARG_STUDENT_NAME);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mStudentId = getArguments().getString(ARG_STUDENT_ID);
 
-            if (!TextUtils.isEmpty(mStudentName)) {
-
+            if (!TextUtils.isEmpty(mStudentId)) {
+                mDbHelper = DBHelper.getInstance(getActivity());
+                mStudent = mDbHelper.getChildByStudentID(mDbHelper.getReadableDatabase(), mStudentId);
             }
         }
     }
@@ -107,6 +112,8 @@ public class StudentDetailFragment extends Fragment {
     }
 
     private void findViews(View rootView) {
+        mToolbar = getActivity().findViewById(R.id.toolbar);
+        mTitleView = getActivity().findViewById(R.id.toolbar_title);
         mEnterToggle = rootView.findViewById(R.id.student_enter);
         mHealthyToggle = rootView.findViewById(R.id.student_healthy);
         mPositionToggle = rootView.findViewById(R.id.student_position);
@@ -121,9 +128,15 @@ public class StudentDetailFragment extends Fragment {
         mHealthyArrow = mHealthyToggle.findViewById(R.id.healthy_item).findViewById(R.id.imageView2);
         mPositionArrow = mPositionToggle.findViewById(R.id.position_item).findViewById(R.id.imageView2);
 
+        mStudentIdView = mEnterToggle.findViewById(R.id.student_id);
     }
 
     private void setupListener() {
+        mToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
+        mToolbar.setNavigationOnClickListener(v -> {
+            ((MainActivity)getActivity()).changeFragment(MyClassFragment.newInstance());
+        });
+
         mEnterToggle.setOnClickListener(v -> {
             if (EnterSubView.getVisibility() == View.VISIBLE) {
                 EnterSubView.setVisibility(View.GONE);
@@ -167,7 +180,10 @@ public class StudentDetailFragment extends Fragment {
         EnterSubView.setVisibility(View.GONE);
         HealthySubView.setVisibility(View.GONE);
         PositionSubView.setVisibility(View.GONE);
-
+        if (mStudent != null && !TextUtils.isEmpty(mStudent.getRoll_no())) {
+            mStudentIdView.setText(mStudent.getRoll_no());
+            mTitleView.setText(mStudent.getName());
+        }
     }
 
     private void testData() {
@@ -175,7 +191,7 @@ public class StudentDetailFragment extends Fragment {
             for (HealthyItem.TYPE type : HealthyItem.TYPE.values()) {
                 HealthyItem item = new HealthyItem();
                 item.setItemType(type);
-                item.setValue(getTestValue(type, mCurrnetStudentIdx));
+                item.setValue(getTestValue(type, 0));
                 myDataset.add(item);
             }
         }
