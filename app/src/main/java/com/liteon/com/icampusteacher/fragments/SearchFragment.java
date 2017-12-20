@@ -28,10 +28,12 @@ import com.google.gson.reflect.TypeToken;
 import com.liteon.com.icampusteacher.App;
 import com.liteon.com.icampusteacher.MainActivity;
 import com.liteon.com.icampusteacher.R;
+import com.liteon.com.icampusteacher.db.DBHelper;
 import com.liteon.com.icampusteacher.util.ContactItem;
 import com.liteon.com.icampusteacher.util.ContactItemAdapter;
 import com.liteon.com.icampusteacher.util.ContactItemSearchAdapter;
 import com.liteon.com.icampusteacher.util.Def;
+import com.liteon.com.icampusteacher.util.JSONResponse;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -45,17 +47,18 @@ import java.util.List;
  */
 public class SearchFragment extends Fragment {
 
-    private static final Comparator<ContactItem> ALPHABETICAL_COMPARATOR = (a, b) -> a.getContent().compareTo(b.getContent());
+    private static final Comparator<JSONResponse.Contents> ALPHABETICAL_COMPARATOR = (a, b) -> a.getComments().compareTo(b.getComments());
     private ImageView mCancel;
     private EditText mInput;
     private RecyclerView mSearchList;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
-    private List<ContactItem> mContactItems;
+    private List<JSONResponse.Contents> mContactItems;
     private ContactItemSearchAdapter.ViewHolder.IHealthViewHolderClicks mOnItemClickListener;
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
     private TextView mTitleView;
+    private DBHelper mDbHelper;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -92,6 +95,7 @@ public class SearchFragment extends Fragment {
         findViews(rootView);
         setListener();
         mTitleView.setText(R.string.search);
+        mDbHelper = DBHelper.getInstance(getActivity());
         return rootView;
     }
 
@@ -150,7 +154,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                final List<ContactItem> filteredModelList = filter(mContactItems, editable.toString());
+                final List<JSONResponse.Contents> filteredModelList = filter(mContactItems, editable.toString());
                 ((ContactItemSearchAdapter)mAdapter).replaceAll(filteredModelList);
                 mSearchList.scrollToPosition(0);
             }
@@ -163,14 +167,15 @@ public class SearchFragment extends Fragment {
     }
 
     private void restoreData() {
-        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
-        String listStr = sp.getString(Def.SP_CONTACT_LIST, "");
-        Gson gson = new GsonBuilder().create();
-        Type typeOfList = new TypeToken<List<ContactItem>>() { }.getType();
-        mContactItems = gson.fromJson(listStr, typeOfList);
-        if (mContactItems == null) {
-            mContactItems = new ArrayList<>();
-        }
+//        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+//        String listStr = sp.getString(Def.SP_CONTACT_LIST, "");
+//        Gson gson = new GsonBuilder().create();
+//        Type typeOfList = new TypeToken<List<ContactItem>>() { }.getType();
+//        mContactItems = gson.fromJson(listStr, typeOfList);
+//        if (mContactItems == null) {
+//            mContactItems = new ArrayList<>();
+//        }
+        mContactItems = mDbHelper.queryReminderData(mDbHelper.getReadableDatabase());
     }
 
     private void saveData() {
@@ -182,12 +187,12 @@ public class SearchFragment extends Fragment {
         editor.commit();
     }
 
-    private static List<ContactItem> filter(List<ContactItem> models, String query) {
+    private static List<JSONResponse.Contents> filter(List<JSONResponse.Contents> models, String query) {
         final String lowerCaseQuery = query.toLowerCase();
 
-        final List<ContactItem> filteredModelList = new ArrayList<>();
-        for (ContactItem model : models) {
-            final String text = model.getContent().toLowerCase();
+        final List<JSONResponse.Contents> filteredModelList = new ArrayList<>();
+        for (JSONResponse.Contents model : models) {
+            final String text = model.getComments().toLowerCase();
             if (text.contains(lowerCaseQuery)) {
                 filteredModelList.add(model);
             }
