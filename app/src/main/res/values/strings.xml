@@ -93,5 +93,7 @@
     <string name="confirm_new_password">新密碼(至少八碼英文或數字)</string>
     <string name="confirm_new_password_again">再次確認新密碼</string>
     <string name="alarm_sync_complete">Synced</string>
-    <string name="alarm_syncing">Ｓyncing</string>
+    <string name="alarm_syncing">Syncing</string>
+    <string name="origin_password_wrong">原密碼錯誤</string>
+    <string name="new_password_wrong">密碼與確認密碼不相同</string>
 </resources>

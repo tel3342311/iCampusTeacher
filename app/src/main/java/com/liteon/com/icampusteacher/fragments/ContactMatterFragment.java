@@ -40,6 +40,7 @@ import com.liteon.com.icampusteacher.util.Def;
 import com.liteon.com.icampusteacher.util.GuardianApiClient;
 import com.liteon.com.icampusteacher.util.HealthyItemAdapter;
 import com.liteon.com.icampusteacher.util.JSONResponse;
+import com.liteon.com.icampusteacher.util.Utils;
 
 import org.w3c.dom.Text;
 
@@ -114,6 +115,7 @@ public class ContactMatterFragment extends Fragment {
         restoreData();
         resetItemToday();
         setRecyclerView();
+        mConfirm.setEnabled(false);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
@@ -287,21 +289,32 @@ public class ContactMatterFragment extends Fragment {
 
     class DeleteItemTask extends AsyncTask<JSONResponse.Contents, Void, Boolean> {
 
+        private String mErrorMessage;
         @Override
         protected Boolean doInBackground(JSONResponse.Contents... contents) {
             JSONResponse.Contents item = contents[0];
             GuardianApiClient apiClient = GuardianApiClient.getInstance(getActivity());
             if (!TextUtils.isEmpty(item.getReminder_id())) {
                 JSONResponse response = apiClient.deleteReminder(item.getReminder_id());
+                if (response == null) {
+                    mErrorMessage = getString(R.string.login_error_no_server_connection);
+                    return false;
+                }
+                if (TextUtils.equals(response.getReturn().getResponseSummary().getStatusCode(), Def.RET_ERR_01)) {
+                    mErrorMessage = getString(R.string.healthy_sync_failed);
+                    return false;
+                }
                 if (TextUtils.equals(Def.RET_SUCCESS_1, response.getReturn().getResponseSummary().getStatusCode())){
                     mDbHelper.deleteReminderById(mDbHelper.getWritableDatabase(), item.getReminder_id());
                     if (item != null && mContactItems.indexOf(item) != -1) {
                         mContactItems.remove(item);
                         return true;
                     }
+                } else {
+                    mErrorMessage = response.getReturn().getResponseSummary().getErrorMessage();
                 }
             }
-            return null;
+            return false;
         }
 
         @Override
@@ -313,17 +326,27 @@ public class ContactMatterFragment extends Fragment {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             if (aBoolean.booleanValue() == false) {
                 //show sync failed
+                Utils.showErrorDialog(mErrorMessage);
             }
         }
     }
 
     class CreateReminderTask extends AsyncTask<JSONResponse.Contents, Void, Boolean> {
 
+        private String mErrorMessage;
         @Override
         protected Boolean doInBackground(JSONResponse.Contents... contents) {
             JSONResponse.Contents item = contents[0];
             GuardianApiClient apiClient = GuardianApiClient.getInstance(getActivity());
             JSONResponse response = apiClient.createReminder(item.getComments(), item.getReminder_id());
+            if (response == null) {
+                mErrorMessage = getString(R.string.login_error_no_server_connection);
+                return false;
+            }
+            if (TextUtils.equals(response.getReturn().getResponseSummary().getStatusCode(), Def.RET_ERR_01)) {
+                mErrorMessage = getString(R.string.healthy_sync_failed);
+                return false;
+            }
             if (TextUtils.equals(response.getReturn().getResponseSummary().getStatusCode(), Def.RET_SUCCESS_1)){
                 if (TextUtils.isEmpty(item.getReminder_id())) {
                     //New Item, Sync data again
@@ -354,6 +377,8 @@ public class ContactMatterFragment extends Fragment {
                     }
                 }
                 return true;
+            } else {
+                mErrorMessage = response.getReturn().getResponseSummary().getErrorMessage();
             }
             return false;
         }
@@ -369,6 +394,7 @@ public class ContactMatterFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
             if (aBoolean.booleanValue() == false) {
                 //show sync failed
+                Utils.showErrorDialog(mErrorMessage);
             }
         }
     }

@@ -145,7 +145,7 @@ public class GuardianApiClient {
 		return null;
 	}
 	
-	public JSONResponse updateParentDetail(String given_name, String account_name, String password, String phoneNumber) {
+	public JSONResponse updateParentDetail(String password) {
 
 		Uri uri = mUri.buildUpon().appendPath(Def.REQUEST_USER_UPDATE).appendPath(mToken).build();
 		try {
@@ -158,8 +158,6 @@ public class GuardianApiClient {
 			urlConnection.setUseCaches(false);
 
 			JSONObject jsonParam = new JSONObject();
-			jsonParam.put(Def.KEY_NAME, given_name);
-			jsonParam.put(Def.KEY_ACCOUNT_NAME, account_name);
 			jsonParam.put(Def.KEY_PASSWORD, password);
 
 			OutputStream os = urlConnection.getOutputStream();
@@ -171,7 +169,6 @@ public class GuardianApiClient {
 			if (status == HttpURLConnection.HTTP_OK) {
 				JSONResponse result = (JSONResponse) getResponseJSON(urlConnection.getInputStream(),
 						JSONResponse.class);
-				//showStatus(result);
             	String statusCode = result.getReturn().getResponseSummary().getStatusCode();
         		Log.e(TAG, "status code: " + statusCode + ", Error message: " + result.getReturn().getResponseSummary().getErrorMessage());
 				return result;
@@ -670,12 +667,6 @@ public class GuardianApiClient {
                 sb.append(line);
             }
             JSONResponse result = new Gson().fromJson(sb.toString(), JSONResponse.class);
-            String statusCode = result.getReturn().getResponseSummary().getStatusCode();
-            if (TextUtils.equals(statusCode, Def.RET_SUCCESS_2) || TextUtils.equals(statusCode, Def.RET_SUCCESS_1)) {
-
-            } else {
-                Log.e(TAG, "status code: " + statusCode+ ", Error message: " + result.getReturn().getResponseSummary().getErrorMessage());
-            }
             return result;
 		} catch (Exception e) {
 			e.printStackTrace();

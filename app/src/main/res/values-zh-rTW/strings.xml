@@ -95,5 +95,7 @@
     <string name="confirm_new_password_again">再次確認新密碼</string>
     <string name="alarm_sync_complete">同步完成</string>
     <string name="alarm_syncing">同步中</string>
+    <string name="origin_password_wrong">原密碼錯誤</string>
+    <string name="new_password_wrong">密碼與確認密碼不相同</string>
 
 </resources>

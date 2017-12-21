@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         GuardianApiClient apiClient = GuardianApiClient.getInstance(this);
         apiClient.setToken(token);
         mClassName.setText(R.string.class_name);
-        changeFragment(MyClassFragment.newInstance());
+        mBottomView.setSelectedItemId(R.id.action_myclass);
     }
 
     public void changeFragment(Fragment frag) {

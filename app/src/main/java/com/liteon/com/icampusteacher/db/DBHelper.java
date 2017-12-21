@@ -125,7 +125,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
-	public Parent getParentByToken(SQLiteDatabase db, String token) {
+	public Parent getAccountByToken(SQLiteDatabase db, String token) {
 		Parent item = new Parent();
 		Cursor cursor = db.rawQuery(SQL_QUERY_ALL_ACCOUNT_DATA, null);
 		if (cursor.getCount() > 0) {
@@ -158,9 +158,10 @@ public class DBHelper extends SQLiteOpenHelper {
 		db.update(AccountEntry.TABLE_NAME, cv, "token=?", new String [] { token });
 		db.close();
 	}
-	public void updateAccountToken(SQLiteDatabase db, String user, String token) {
+	public void updateAccountInfo(SQLiteDatabase db, String user, String password, String token) {
         ContentValues cv = new ContentValues();
         cv.put(AccountEntry.COLUMN_NAME_TOKEN, token);
+		cv.put(AccountEntry.COLUMN_NAME_PASSWORD, password);
         db.update(AccountEntry.TABLE_NAME, cv, "username=?", new String [] { user });
         db.close();
     }

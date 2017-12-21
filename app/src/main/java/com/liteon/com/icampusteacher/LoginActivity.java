@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,11 +24,8 @@ import com.liteon.com.icampusteacher.util.GuardianApiClient;
 import com.liteon.com.icampusteacher.util.JSONResponse;
 import com.liteon.com.icampusteacher.util.Utils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import io.reactivex.Flowable;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -155,11 +149,12 @@ public class LoginActivity extends AppCompatActivity {
                 GuardianApiClient apiClient = GuardianApiClient.getInstance(LoginActivity.this);
                 final JSONResponse  response = apiClient.login(account, password);
                 if (response == null) {
-                    return null;
+                    mErrorMsg = getString(R.string.login_error_no_server_connection);
+                    return Boolean.FALSE;
                 }
                 if (TextUtils.equals(Def.RET_ERR_01, response.getReturn().getResponseSummary().getStatusCode())) {
-                    runOnUiThread(() -> showLoginErrorDialog(getString(R.string.login_error_email), getString(android.R.string.ok)));
-                    return null;
+                    mErrorMsg = getString(R.string.login_error_account_or_password);
+                    return Boolean.FALSE;
                 }
                 DBHelper helper = DBHelper.getInstance(LoginActivity.this);
                 SharedPreferences sp = getApplicationContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
@@ -169,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                 cv.put(AccountTable.AccountEntry.COLUMN_NAME_PASSWORD, password);
                 cv.put(AccountTable.AccountEntry.COLUMN_NAME_TOKEN, token);
                 if (!TextUtils.isEmpty(helper.getAccountToken(helper.getReadableDatabase(), account))) {
-                    helper.updateAccountToken(helper.getWritableDatabase(), account, token);
+                    helper.updateAccountInfo(helper.getWritableDatabase(), account, password, token);
                 } else {
                     helper.insertAccount(helper.getWritableDatabase(), cv);
                 }
