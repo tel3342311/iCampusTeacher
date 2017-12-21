@@ -48,9 +48,6 @@
     <string name="icg_healthy">icg healthy</string>
     <string name="student_position">student position</string>
     <string name="report_absent">Report Student Info. Error</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_user_info">UserInfoActivity</string>
     <!-- healthy -->
     <string name="healthy_today_reocrd">Health Summary</string>
     <string name="healthy_today_reocrd_not_update">Health Summary(Not Synced)</string>

@@ -35,13 +35,13 @@ public class DailyHealthFragment extends Fragment {
 	private HealthPieChartView mPiechartView;
 	private TYPE mType;
 	private int mCurrnetStudentIdx;
-	private Toolbar mToolbar;
-	private TextView mTitleView;
-	private DrawerLayout mDrawerLayout;
 
-	public DailyHealthFragment(HealthyItem.TYPE type) {
+	public DailyHealthFragment() { mType = TYPE.ACTIVITY; }
+
+	public void setType(TYPE type) {
 		mType = type;
 	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_daily_healthy, container, false);

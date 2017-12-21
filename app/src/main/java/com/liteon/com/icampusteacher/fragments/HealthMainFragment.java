@@ -132,24 +132,25 @@ public class HealthMainFragment extends Fragment implements IHealthViewHolderCli
 
         @Override
         public Fragment getItem(int position) {
+            DailyHealthFragment frag = new DailyHealthFragment();
             if (position == HEALTHY_ACTIVITY) {
-                return new DailyHealthFragment(TYPE.ACTIVITY);
+                frag.setType(TYPE.ACTIVITY);
             } else if (position == HEALTHY_CALORIES) {
-                return new DailyHealthFragment(TYPE.CALORIES_BURNED);
+                frag.setType(TYPE.CALORIES_BURNED);
             } else if (position == HEALTHY_STEPS) {
-                return new DailyHealthFragment(TYPE.TOTAL_STEPS);
+                frag.setType(TYPE.TOTAL_STEPS);
             } else if (position == HEALTHY_WALKING) {
-                return new DailyHealthFragment(TYPE.WALKING_TIME);
+                frag.setType(TYPE.WALKING_TIME);
             } else if (position == HEALTHY_RUNNING) {
-                return new DailyHealthFragment(TYPE.RUNNING_TIME);
+                frag.setType(TYPE.RUNNING_TIME);
             } else if (position == HEALTHY_CYCLING) {
-                return new DailyHealthFragment(TYPE.CYCLING_TIME);
+                frag.setType(TYPE.CYCLING_TIME);
             } else if (position == HEALTHY_HEART_RATE) {
-                return new DailyHealthFragment(TYPE.HEART_RATE);
+                frag.setType(TYPE.HEART_RATE);
             } else if (position == HEALTHY_SLEEPING) {
-                return new DailyHealthFragment(TYPE.SLEEP_TIME);
+                frag.setType(TYPE.SLEEP_TIME);
             }
-            return null;
+            return frag;
         }
 
         @Override
