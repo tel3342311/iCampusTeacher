@@ -53,6 +53,18 @@
             android:name=".UserInfoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
+        <!-- For FCM -->
+        <service android:name=".service.GuardianMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".service.GuardianInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

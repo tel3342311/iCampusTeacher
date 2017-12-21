@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.liteon.com.icampusteacher.db.AccountTable;
 import com.liteon.com.icampusteacher.db.DBHelper;
 import com.liteon.com.icampusteacher.util.CustomDialog;
@@ -185,6 +186,10 @@ public class LoginActivity extends AppCompatActivity {
                     //Save child list to db
                     helper.insertChildList(helper.getWritableDatabase(), studentList);
                 }
+                //Send FireBase Instance token to server
+                String fcmToken = FirebaseInstanceId.getInstance().getToken();
+                apiClient.updateAppToken(fcmToken);
+                Log.d(TAG, "UpdateAppToken called : FCM Token is " + fcmToken);
                 //get Reminder list
                 JSONResponse reminders = apiClient.getReminders();
                 List<JSONResponse.Contents> reminderList = Arrays.asList(reminders.getReturn().getResults().getReminders()[0].getContents());
