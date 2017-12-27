@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -29,6 +30,7 @@ import com.liteon.com.icampusteacher.util.JSONResponse;
 import com.liteon.com.icampusteacher.util.RecyclerItemClickListener;
 import com.liteon.com.icampusteacher.util.StudentItem;
 import com.liteon.com.icampusteacher.util.StudentItemAdapter;
+import com.liteon.com.icampusteacher.util.Utils;
 
 import org.w3c.dom.Text;
 
@@ -57,6 +59,8 @@ public class MyClassFragment extends Fragment {
     private TextView mTitleView;
     private View mSyncView;
     private Button mSyncBtn;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     public MyClassFragment() {
         // Required empty public constructor
     }
@@ -107,12 +111,22 @@ public class MyClassFragment extends Fragment {
         mDrawer = getActivity().findViewById(R.id.drawer_layout);
         mSyncView = rootView.findViewById(R.id.sync_view);
         mSyncBtn = mSyncView.findViewById(R.id.button_sync);
+        mSwipeRefreshLayout = rootView.findViewById(R.id.refresh_layout);
     }
 
     private void setListener() {
         mToolbar.setNavigationIcon(R.drawable.ic_dehaze_white_24dp);
         mToolbar.setNavigationOnClickListener(v -> mDrawer.openDrawer(Gravity.LEFT));
         mSyncBtn.setOnClickListener( v -> startSync());
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+            if (mSyncView.getVisibility() == View.GONE) {
+                mSyncView.setVisibility(View.VISIBLE);
+            }
+            startSync();
+        });
     }
 
     public void startSync() {
@@ -169,6 +183,7 @@ public class MyClassFragment extends Fragment {
             //get Child list
             JSONResponse response_childList = apiClient.getChildrenList();
             if (response_childList == null) {
+                mErrorMsg = getString(R.string.login_error_no_server_connection);
                 return false;
             }
             if (TextUtils.equals(response_childList.getReturn().getResponseSummary().getStatusCode(), Def.RET_SUCCESS_1 )) {
@@ -197,6 +212,9 @@ public class MyClassFragment extends Fragment {
             Runnable runnable = () -> {
                 if (aBoolean.booleanValue() == false) {
                     title.setText(R.string.healthy_sync_failed);
+                    if (!TextUtils.isEmpty(mErrorMsg)) {
+                        Utils.showErrorDialog(mErrorMsg);
+                    }
                 } else {
                     title.setText(R.string.alarm_sync_complete);
                     mAdapter.notifyDataSetChanged();
@@ -204,6 +222,7 @@ public class MyClassFragment extends Fragment {
                 handler.postDelayed(hideSyncView, 3000);
             };
             handler.postDelayed(runnable, 2000);
+
         }
     }
 }

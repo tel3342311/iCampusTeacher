@@ -36,6 +36,7 @@ import com.liteon.com.icampusteacher.db.DBHelper;
 import com.liteon.com.icampusteacher.util.ConfirmDeleteDialog;
 import com.liteon.com.icampusteacher.util.ContactItem;
 import com.liteon.com.icampusteacher.util.ContactItemAdapter;
+import com.liteon.com.icampusteacher.util.ContactItemSearchAdapter;
 import com.liteon.com.icampusteacher.util.Def;
 import com.liteon.com.icampusteacher.util.GuardianApiClient;
 import com.liteon.com.icampusteacher.util.HealthyItemAdapter;
@@ -49,6 +50,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -59,6 +61,7 @@ import java.util.List;
  */
 public class ContactMatterFragment extends Fragment {
 
+    private static final Comparator<JSONResponse.Contents> DATE_COMPARATOR = (a, b) -> b.getCreated_date().compareTo(a.getCreated_date());
     private RecyclerView mContactList;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
@@ -267,7 +270,8 @@ public class ContactMatterFragment extends Fragment {
         mContactList.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mContactList.setLayoutManager(mLayoutManager);
-        mAdapter = new ContactItemAdapter(mContactItems, mOnItemClickListener);
+        mAdapter = new ContactItemAdapter(mOnItemClickListener, DATE_COMPARATOR);
+        ((ContactItemAdapter)mAdapter).add(mContactItems);
         mContactList.setAdapter(mAdapter);
     }
 
@@ -322,7 +326,8 @@ public class ContactMatterFragment extends Fragment {
             super.onPostExecute(aBoolean);
             resetItemToday();
             mInputField.setText("");
-            mAdapter.notifyDataSetChanged();
+            ((ContactItemAdapter)mAdapter).replaceAll(mContactItems);
+            mContactList.scrollToPosition(0);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             if (aBoolean.booleanValue() == false) {
                 //show sync failed
@@ -391,11 +396,25 @@ public class ContactMatterFragment extends Fragment {
             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(mInputField.getWindowToken(), 0);
             resetItemToday();
-            mAdapter.notifyDataSetChanged();
+            ((ContactItemAdapter)mAdapter).replaceAll(mContactItems);
+            mContactList.scrollToPosition(0);
             if (aBoolean.booleanValue() == false) {
                 //show sync failed
                 Utils.showErrorDialog(mErrorMessage);
             }
         }
+    }
+
+    private static List<JSONResponse.Contents> filter(List<JSONResponse.Contents> models, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final List<JSONResponse.Contents> filteredModelList = new ArrayList<>();
+        for (JSONResponse.Contents model : models) {
+            final String text = model.getComments().toLowerCase();
+            if (text.contains(lowerCaseQuery)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 }

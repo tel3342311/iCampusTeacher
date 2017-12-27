@@ -9,13 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/component_sync"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/student_grid"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_below="@id/sync_view"/>
-
+        android:layout_below="@id/sync_view">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/student_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
