@@ -200,8 +200,6 @@ public class GuardianApiClient {
 
 			JSONObject jsonParam = new JSONObject();
 			jsonParam.put(Def.KEY_USERNAME, userEmail);
-			jsonParam.put(Def.KEY_USER_ROLE, "parent_admin");
-
 
 			OutputStream os = urlConnection.getOutputStream();
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
