@@ -16,12 +16,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.liteon.com.icampusteacher.util.Def;
+import com.liteon.com.icampusteacher.util.GuardianApiClient;
+import com.liteon.com.icampusteacher.util.JSONResponse;
 import com.liteon.com.icampusteacher.util.Utils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import static com.liteon.com.icampusteacher.util.Utils.isNetworkConnectionAvailable;
 
 public class UserResetPasswordActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -106,71 +111,45 @@ public class UserResetPasswordActivity extends AppCompatActivity implements View
         return true;
     }
 
-//    private JSONResponse resetPassword() {
-//        String strName = mName.getText().toString();
-//        GuardianApiClient apiClient = new GuardianApiClient(this);
-//        return apiClient.resetPassword(strName);
-//    }
+    private JSONResponse resetPassword() {
+        String strName = mName.getText().toString();
+        GuardianApiClient apiClient = new GuardianApiClient(this);
+        return apiClient.resetPassword(strName);
+    }
 
 
     class ResetTask extends AsyncTask<Void, Void, Boolean> {
 
+        private String mErrorMsg;
+
         protected Boolean doInBackground(Void... params) {
             //check network
-//            if (!isNetworkConnectionAvailable()) {
-//                runOnUiThread(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        showErrorDialog( getString(R.string.login_no_network));
-//                    }
-//                });
-//                return false;
-//            }
-//            GuardianApiClient apiClient = new GuardianApiClient(UserResetPasswordActivity.this);
-//            //check server
-//            if (!isURLReachable(UserResetPasswordActivity.this, apiClient.getServerUri().toString())) {
-//                runOnUiThread(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        showErrorDialog(getString(R.string.login_error_no_server_connection));
-//                    }
-//                });
-//                return false;
-//            }
-//            JSONResponse response = resetPassword();
-//            if (response == null) {
-//                runOnUiThread(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        showErrorDialog(getString(R.string.forget_account_not_exist));
-//                    }
-//                });
-//                return false;
-//            }
-//            if (response.getReturn().getResults() == null) {
-//                runOnUiThread(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        showErrorDialog(getString(R.string.login_error_email));
-//                    }
-//                });
-//                return false;
-//            }
-//            return true;
-            return true;
+            if (!isNetworkConnectionAvailable()) {
+                mErrorMsg = getString(R.string.login_no_network);
+                return false;
+            }
+            JSONResponse response = resetPassword();
+            if (response == null) {
+                mErrorMsg = getString(R.string.login_error_no_server_connection);
+                return false;
+            }
+            if (TextUtils.equals(response.getReturn().getResponseSummary().getStatusCode(), Def.RET_ERR_23)) {
+                return true;
+            } else {
+                mErrorMsg = getString(R.string.login_error_email);
+                return false;
+            }
         }
 
         protected void onPostExecute(Boolean isSuccess) {
-//            if (isSuccess) {
-//                mTitleView.setText(getString(R.string.forget_reset_done));
-//                mDescView.setText(getString(R.string.forget_check_mailbox_and_setup));
-//                mSend.setVisibility(View.GONE);
-//                mName.setVisibility(View.INVISIBLE);
-//            }
+            if (isSuccess) {
+                mTitleView.setText(getString(R.string.forget_reset_done));
+                mDescView.setText(getString(R.string.forget_check_mailbox_and_setup));
+                mSend.setVisibility(View.GONE);
+                mName.setVisibility(View.INVISIBLE);
+            } else {
+                Utils.showErrorDialog(mErrorMsg);
+            }
         }
     }
 }
