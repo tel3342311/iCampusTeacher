@@ -46,6 +46,7 @@ import com.liteon.com.icampusteacher.util.Utils;
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,6 +121,18 @@ public class ContactMatterFragment extends Fragment {
         setRecyclerView();
         mConfirm.setEnabled(false);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        SharedPreferences sp = getActivity().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+        String reminderID = sp.getString(Def.SP_SEARCH_REMINDER_ID, "");
+        if (!TextUtils.isEmpty(reminderID)) {
+            for (JSONResponse.Contents item : mContactItems) {
+                if (TextUtils.equals(item.getReminder_id(), reminderID)) {
+                    mOnItemClickListener.onClick(item);
+                    break;
+                }
+            }
+            sp.edit().remove(Def.SP_SEARCH_REMINDER_ID).commit();
+        }
     }
 
     private void resetItemToday() {
@@ -181,12 +194,18 @@ public class ContactMatterFragment extends Fragment {
         mCancel.setOnClickListener(v -> {
             mInputField.setText("");
             mCancel.setEnabled(false);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(mInputField.getWindowToken(), 0);
             resetItemToday();
         });
 
         mConfirm.setOnClickListener( v -> {
+
+            mConfirm.setVisibility(View.VISIBLE);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            mContactList.setVisibility(View.VISIBLE);
+            mSepLine.setVisibility(View.VISIBLE);
             String content = mInputField.getText().toString();
             Date date = Calendar.getInstance().getTime();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE HH:mm");
@@ -229,6 +248,7 @@ public class ContactMatterFragment extends Fragment {
             mCurrentItem = item;
             mDateTitle.setText(mCurrentItem.getCreated_date());
             mInputField.setText(mCurrentItem.getComments());
+            mInputField.setEnabled(false);
             mConfirm.setVisibility(View.INVISIBLE);
             mConfirm.setEnabled(false);
             mContactList.setVisibility(View.GONE);
@@ -259,10 +279,14 @@ public class ContactMatterFragment extends Fragment {
         });
 
         mEdit.setOnClickListener(v -> {
-            mConfirm.setVisibility(View.VISIBLE);
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            mContactList.setVisibility(View.VISIBLE);
-            mSepLine.setVisibility(View.VISIBLE);
+            mInputField.setEnabled(true);
+            mInputField.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mInputField, InputMethodManager.SHOW_IMPLICIT);
+//            mConfirm.setVisibility(View.VISIBLE);
+//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+//            mContactList.setVisibility(View.VISIBLE);
+//            mSepLine.setVisibility(View.VISIBLE);
         });
     }
 
@@ -368,6 +392,15 @@ public class ContactMatterFragment extends Fragment {
                                 }
                             }
                             if (!isExist) {
+                                //For re-formatting date from server
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                                try {
+                                    Date currentDate = sdf.parse(newItem.getCreated_date());
+                                    sdf.applyPattern("yyyy/MM/dd EE HH:mm");
+                                    newItem.setCreated_date(sdf.format(currentDate));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 newList.add(0, newItem);
                             }
                         }
@@ -398,6 +431,7 @@ public class ContactMatterFragment extends Fragment {
             resetItemToday();
             ((ContactItemAdapter)mAdapter).replaceAll(mContactItems);
             mContactList.scrollToPosition(0);
+            mAdapter.notifyDataSetChanged();
             if (aBoolean.booleanValue() == false) {
                 //show sync failed
                 Utils.showErrorDialog(mErrorMessage);

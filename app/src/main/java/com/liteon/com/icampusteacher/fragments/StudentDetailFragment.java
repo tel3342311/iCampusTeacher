@@ -191,6 +191,10 @@ public class StudentDetailFragment extends Fragment {
 
         mUpdateTimeView = mPositionToggle.findViewById(R.id.postion_update_date);
         mLocationOnMap = mPositionToggle.findViewById(R.id.map_location);
+
+        //Hide these item
+        EnterSubView.setVisibility(View.GONE);
+        HealthySubView.setVisibility(View.GONE);
     }
 
     private void setupListener() {
@@ -427,20 +431,24 @@ public class StudentDetailFragment extends Fragment {
                 if (isAlerted) {
                     setAlert(mLastPosition, "2017-07-10 週一 07:50");
                 }
-                SimpleDateFormat sdFormat = new SimpleDateFormat();
-                String format = "yyyy-MM-dd HH:mm:ss.S";
-                sdFormat.applyPattern(format);
-                Date date = Calendar.getInstance().getTime();
-                if (!TextUtils.isEmpty(mLastPositionUpdateTime)) {
-                    try {
-                        date = sdFormat.parse(mLastPositionUpdateTime);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                if (TextUtils.isEmpty(result)) {
+                    mUpdateTimeView.setText(R.string.unable_to_locate);
+                } else {
+                    SimpleDateFormat sdFormat = new SimpleDateFormat();
+                    String format = "yyyy-MM-dd HH:mm:ss.S";
+                    sdFormat.applyPattern(format);
+                    Date date = Calendar.getInstance().getTime();
+                    if (!TextUtils.isEmpty(mLastPositionUpdateTime)) {
+                        try {
+                            date = sdFormat.parse(mLastPositionUpdateTime);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE \n HH:mm");
+                    String updateTime = sdf.format(date);
+                    mUpdateTimeView.setText(updateTime);
                 }
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE \n HH:mm");
-                String updateTime = sdf.format(date);
-                mUpdateTimeView.setText(updateTime);
             }
         };
     }
