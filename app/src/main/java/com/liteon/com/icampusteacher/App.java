@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class App extends Application implements  Application.ActivityLifecycleCallbacks {
 
@@ -14,6 +16,7 @@ public class App extends Application implements  Application.ActivityLifecycleCa
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         mContext = this;
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         registerActivityLifecycleCallbacks(this);

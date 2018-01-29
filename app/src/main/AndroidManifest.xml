@@ -14,7 +14,7 @@
     <application
         android:name=".App"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
@@ -77,6 +77,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="cc3ede86242b4a21d8b38b2b6fde352f209725ef" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
