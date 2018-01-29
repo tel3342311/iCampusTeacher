@@ -130,8 +130,10 @@ public class ClsUtils {
     private static final Pattern UPPER_CASE = Pattern.compile("\\p{Ll}");
     private static final Pattern DECIMAL_DIGIT = Pattern.compile("\\p{Nd}");
 
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-zA-Z])(?=.*[0-9])");
+
     public static boolean isValidPassword(final String password) {
-        return containsDigit(password) && containsLowerCase(password);
+        return password.length() > 8 && PASSWORD_PATTERN.matcher(password).find();
     }
 
     private static boolean containsDigit(final String str) {
@@ -143,7 +145,7 @@ public class ClsUtils {
     }
 
     private static boolean containsLowerCase(final String str) {
-        return LOWER_CASE.matcher(str).find();
+        return str.matches("[a-zA-Z]");
     }
 
 }

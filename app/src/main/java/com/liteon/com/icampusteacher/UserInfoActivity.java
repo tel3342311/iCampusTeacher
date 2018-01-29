@@ -117,7 +117,15 @@ public class UserInfoActivity extends AppCompatActivity {
             mPasswordHint.setVisibility(View.INVISIBLE);
             mPasswordHint.setText("");
         }
-
+        //check if password is match constraint
+        if (!ClsUtils.isValidPassword(mNewPassword.getText().toString())) {
+            mPasswordHint.setVisibility(View.VISIBLE);
+            mPasswordHint.setText(R.string.new_password_hint);
+            return false;
+        } else {
+            mPasswordHint.setVisibility(View.INVISIBLE);
+            mPasswordHint.setText("");
+        }
         //check if password & password confirm is match
         if (!TextUtils.equals(mConfirmNewPassword.getText(), mNewPassword.getText())) {
             mPasswordHint.setVisibility(View.VISIBLE);
@@ -150,6 +158,7 @@ public class UserInfoActivity extends AppCompatActivity {
         mIsEditMode = true;
         mNewPassword.setVisibility(View.VISIBLE);
         mConfirmNewPassword.setVisibility(View.VISIBLE);
+        mOriginPassword.setEnabled(true);
         mOriginPassword.setText("");
         mNewPassword.setText("");
         mConfirmNewPassword.setText("");
@@ -169,6 +178,7 @@ public class UserInfoActivity extends AppCompatActivity {
         mToolbar.setTitle("");
         mAccount.setText(mAccountItem.getUsername());
         mOriginPassword.setText(mAccountItem.getPassword());
+        mOriginPassword.setEnabled(false);
         mNewPassword.setVisibility(View.INVISIBLE);
         mConfirmNewPassword.setVisibility(View.INVISIBLE);
         mPasswordHint.setVisibility(View.INVISIBLE);

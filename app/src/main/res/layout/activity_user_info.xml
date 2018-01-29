@@ -50,7 +50,7 @@
             android:textColor="@color/md_grey_400"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/login_edit_text_size"
-            android:editable="false" />
+            android:editable="false"/>
 
         <EditText
             android:id="@+id/login_password"
