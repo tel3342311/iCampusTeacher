@@ -92,11 +92,12 @@ public class MyClassFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_my_class, container, false);
         findViews(rootView);
-
+        SharedPreferences sp = getActivity().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+        String school_info = sp.getString(Def.SP_SCHOOL_INFO, "");
         mDbHelper = DBHelper.getInstance(getActivity());
         //get child list
         mDataSet = mDbHelper.queryChildList(mDbHelper.getReadableDatabase());
-        mTitleView.setText(getString(R.string.class_name));
+        mTitleView.setText(school_info);
         initRecycleView();
         setListener();
         return rootView;

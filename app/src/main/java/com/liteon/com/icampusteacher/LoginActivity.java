@@ -24,7 +24,10 @@ import com.liteon.com.icampusteacher.util.GuardianApiClient;
 import com.liteon.com.icampusteacher.util.JSONResponse;
 import com.liteon.com.icampusteacher.util.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
@@ -187,10 +190,39 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "UpdateAppToken called : FCM Token is " + fcmToken);
                 //get Reminder list
                 JSONResponse reminders = apiClient.getReminders();
-                List<JSONResponse.Contents> reminderList = Arrays.asList(reminders.getReturn().getResults().getReminders()[0].getContents());
-                if (reminderList.size() > 0) {
-                    helper.clearReminderList(helper.getWritableDatabase());
-                    helper.insertReminderList(helper.getWritableDatabase(), reminderList);
+                JSONResponse.Reminders reminderArray[] =  reminders.getReturn().getResults().getReminders();
+                if (reminderArray.length > 0) {
+                    List<JSONResponse.Contents> reminderList = Arrays.asList(reminderArray[0].getContents());
+                    if (reminderList.size() > 0) {
+                        for (JSONResponse.Contents item : reminderList) {
+                            //For re-formatting date from server
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                            try {
+                                Date currentDate = sdf.parse(item.getCreated_date());
+                                sdf.applyPattern("yyyy/MM/dd EE HH:mm");
+                                item.setCreated_date(sdf.format(currentDate));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        helper.clearReminderList(helper.getWritableDatabase());
+                        helper.insertReminderList(helper.getWritableDatabase(), reminderList);
+                    }
+                }
+                //Get user info
+                JSONResponse response_userDetail = apiClient.getUserDetail();
+                if (response_userDetail.getReturn().getResults() != null){
+                    String school_name = response_userDetail.getReturn().getResults().getAccount_name();
+                    String grade_no = "1";
+                    String class_no = "1";
+                    if (studentList.size() > 0) {
+                        grade_no = studentList.get(0).getGrade();
+                        class_no = studentList.get(0).get_class();
+                    }
+                    String school_info = String.format(getString(R.string.class_name), school_name, grade_no, class_no);
+                    SharedPreferences.Editor edito1 = sp.edit();
+                    edito1.putString(Def.SP_SCHOOL_INFO, school_info);
+                    edito1.commit();
                 }
                 return true;
             } else {

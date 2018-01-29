@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.action_app_info:
                     intent.setClass(MainActivity.this, UserTermActivity.class);
+                    intent.putExtra(Def.EXTRA_DISABLE_USERTREM_BOTTOM, true);
                     startActivity(intent);
                     break;
             }
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         SharedPreferences sp = getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
         String token = sp.getString(Def.SP_LOGIN_TOKEN, "");
+        String school_info = sp.getString(Def.SP_SCHOOL_INFO, "");
         if (sp.getInt(Def.SP_USER_TERM_READ, 0) == 0) {
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, WelcomeActivity.class);
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         }
         GuardianApiClient apiClient = GuardianApiClient.getInstance(this);
         apiClient.setToken(token);
-        mClassName.setText(R.string.class_name);
+        mClassName.setText(school_info);
         mBottomView.setSelectedItemId(R.id.action_myclass);
     }
 
