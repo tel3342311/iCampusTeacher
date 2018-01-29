@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">iCampus Teacher</string>
+    <string name="app_name">iCG Teacher</string>
     <string name="welcome_title">Hello, welcome to \niCampus Guardian\n </string>
     <string name="welcome_user_term">End User License Agreement (EULA)</string>
     <string name="welcome_read_eula">Please read the EULA and click on accept to proceed to the app</string>
@@ -40,7 +40,7 @@
     <string name="teacher_info">Teacher Information</string>
     <string name="app_info">App Information </string>
     <string name="logout">Log out</string>
-    <string name="class_name">%s國小%s年%s班</string>
+    <string name="class_name">%s %s年%s班</string>
     <!-- Student Info -->
     <string name="safty_enter_school">Arrive School</string>
     <string name="safty_leave_school">Leave School</string>
@@ -96,4 +96,7 @@
     <string name="alarm_syncing">Syncing</string>
     <string name="origin_password_wrong">原密碼錯誤</string>
     <string name="new_password_wrong">密碼與確認密碼不相同</string>
+    <string name="new_password_hint">密碼至少八碼英文或數字</string>
+    <!-- Location -->
+    <string name="unable_to_locate">無法定位</string>
 </resources>

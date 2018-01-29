@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">iCampus Teacher</string>
+    <string name="app_name">iCG Teacher</string>
     <string name="welcome_title">您好，歡迎使用 \niCampus Guardian\n 校園守護者</string>
     <string name="welcome_user_term">使用者協議及隱私政策</string>
     <string name="welcome_read_eula">點選同意以確認iCG校園守護者的使用者協議及隱私政策</string>
@@ -41,7 +41,7 @@
     <string name="teacher_info">老師資料設定</string>
     <string name="app_info">App資訊與隱私設定</string>
     <string name="logout">登 出</string>
-    <string name="class_name">%s國小%s年%s班</string>
+    <string name="class_name">%s %s年%s班</string>
     <!-- Student Info -->
     <string name="safty_enter_school">到校</string>
     <string name="safty_leave_school">離校</string>
@@ -97,5 +97,6 @@
     <string name="alarm_syncing">同步中</string>
     <string name="origin_password_wrong">原密碼錯誤</string>
     <string name="new_password_wrong">密碼與確認密碼不相同</string>
-
+    <!-- Location -->
+    <string name="unable_to_locate">無法定位</string>
 </resources>
