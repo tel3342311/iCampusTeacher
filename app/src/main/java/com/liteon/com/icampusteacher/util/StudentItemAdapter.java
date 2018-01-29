@@ -24,6 +24,10 @@ public class StudentItemAdapter extends RecyclerView.Adapter<StudentItemAdapter.
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.component_student_item, parent, false);
+        int height = parent.getMeasuredHeight() / 4;
+        int width = parent.getMeasuredWidth() / 4;
+
+        v.setLayoutParams(new RecyclerView.LayoutParams(width, height));
         ViewHolder vh = new ViewHolder(v);
         vh.mStudentIcon = v.findViewById(R.id.student_icon);
         vh.mStudentName = v.findViewById(R.id.student_name);
