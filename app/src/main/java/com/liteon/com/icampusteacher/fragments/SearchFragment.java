@@ -34,11 +34,14 @@ import com.liteon.com.icampusteacher.util.ContactItemAdapter;
 import com.liteon.com.icampusteacher.util.ContactItemSearchAdapter;
 import com.liteon.com.icampusteacher.util.Def;
 import com.liteon.com.icampusteacher.util.JSONResponse;
+import com.liteon.com.icampusteacher.util.SearchItem;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,13 +50,15 @@ import java.util.List;
  */
 public class SearchFragment extends Fragment {
 
-    private static final Comparator<JSONResponse.Contents> ALPHABETICAL_COMPARATOR = (a, b) -> a.getComments().compareTo(b.getComments());
+    private static final Comparator<SearchItem> ALPHABETICAL_COMPARATOR = (a, b) -> a.getContent().compareTo(b.getContent());
     private ImageView mCancel;
     private EditText mInput;
     private RecyclerView mSearchList;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
     private List<JSONResponse.Contents> mContactItems;
+    private List<JSONResponse.Student> mStudentItems;
+    private List<SearchItem> mSearchItems;
     private ContactItemSearchAdapter.ViewHolder.IHealthViewHolderClicks mOnItemClickListener;
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
@@ -113,7 +118,7 @@ public class SearchFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mSearchList.setLayoutManager(mLayoutManager);
         mAdapter = new ContactItemSearchAdapter(mOnItemClickListener, ALPHABETICAL_COMPARATOR);
-        ((ContactItemSearchAdapter)mAdapter).add(mContactItems);
+        ((ContactItemSearchAdapter)mAdapter).add(mSearchItems);
         mSearchList.setAdapter(mAdapter);
     }
 
@@ -154,45 +159,62 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                final List<JSONResponse.Contents> filteredModelList = filter(mContactItems, editable.toString());
+                final List<SearchItem> filteredModelList = filter(mSearchItems, editable.toString());
                 ((ContactItemSearchAdapter)mAdapter).replaceAll(filteredModelList);
                 mSearchList.scrollToPosition(0);
             }
         });
 
         mOnItemClickListener = item -> {
-            BottomNavigationView bottomView = ((MainActivity)getActivity()).findViewById(R.id.bottom_navigation);
-            bottomView.setSelectedItemId(R.id.action_contact);
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
+            SharedPreferences sp = getActivity().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            if (item.isStudent()) {
+                editor.putString(Def.SP_SEARCH_STUDENT_NAME, item.getId());
+                editor.commit();
+                BottomNavigationView bottomView = ((MainActivity)getActivity()).findViewById(R.id.bottom_navigation);
+                bottomView.setSelectedItemId(R.id.action_myclass);
+                ((MainActivity)getActivity()).changeFragment(StudentDetailFragment.newInstance(item.getContent(), item.getId()));
+                editor.putString(Def.SP_STUDENT_NAME, item.getContent());
+                editor.putString(Def.SP_STUDENT_ID, item.getId());
+                editor.commit();
+            } else {
+                editor.putString(Def.SP_SEARCH_REMINDER_ID, item.getId());
+                editor.commit();
+                BottomNavigationView bottomView = ((MainActivity)getActivity()).findViewById(R.id.bottom_navigation);
+                bottomView.setSelectedItemId(R.id.action_contact);
+            }
+
+
         };
     }
 
     private void restoreData() {
-//        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
-//        String listStr = sp.getString(Def.SP_CONTACT_LIST, "");
-//        Gson gson = new GsonBuilder().create();
-//        Type typeOfList = new TypeToken<List<ContactItem>>() { }.getType();
-//        mContactItems = gson.fromJson(listStr, typeOfList);
-//        if (mContactItems == null) {
-//            mContactItems = new ArrayList<>();
-//        }
         mContactItems = mDbHelper.queryReminderData(mDbHelper.getReadableDatabase());
+        mStudentItems = mDbHelper.queryChildList(mDbHelper.getReadableDatabase());
+        mSearchItems = new ArrayList<>();
+        for (JSONResponse.Contents item : mContactItems) {
+            SearchItem searchItem = new SearchItem();
+            searchItem.setId(item.getReminder_id());
+            searchItem.setContent(item.getComments());
+            mSearchItems.add(searchItem);
+        }
+        for (JSONResponse.Student item : mStudentItems) {
+            SearchItem searchItem = new SearchItem();
+            searchItem.setId(item.getStudent_id());
+            searchItem.setContent(item.getName());
+            searchItem.setStudent(true);
+            mSearchItems.add(searchItem);
+        }
     }
 
-    private void saveData() {
-        Gson gson = new Gson();
-        String input = gson.toJson(mContactItems);
-        SharedPreferences sp = App.getContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(Def.SP_CONTACT_LIST, input);
-        editor.commit();
-    }
-
-    private static List<JSONResponse.Contents> filter(List<JSONResponse.Contents> models, String query) {
+    private static List<SearchItem> filter(List<SearchItem> models, String query) {
         final String lowerCaseQuery = query.toLowerCase();
 
-        final List<JSONResponse.Contents> filteredModelList = new ArrayList<>();
-        for (JSONResponse.Contents model : models) {
-            final String text = model.getComments().toLowerCase();
+        final List<SearchItem> filteredModelList = new ArrayList<>();
+        for (SearchItem model : models) {
+            final String text = model.getContent().toLowerCase();
             if (text.contains(lowerCaseQuery)) {
                 filteredModelList.add(model);
             }

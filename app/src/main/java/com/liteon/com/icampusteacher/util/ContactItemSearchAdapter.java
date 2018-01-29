@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ContactItemSearchAdapter extends RecyclerView.Adapter<ContactItemSearchAdapter.ViewHolder> {
 
-    private final Comparator<JSONResponse.Contents> mComparator;
+    private final Comparator<SearchItem> mComparator;
     private WeakReference<ViewHolder.IHealthViewHolderClicks> mClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -23,7 +23,7 @@ public class ContactItemSearchAdapter extends RecyclerView.Adapter<ContactItemSe
         public View mRootView;
         public TextView mTitleTextView;
         public WeakReference<IHealthViewHolderClicks> mClicks;
-        public JSONResponse.Contents mItem;
+        public SearchItem mItem;
         public ViewHolder(View v, IHealthViewHolderClicks itemClickListener) {
             super(v);
             mRootView = v;
@@ -38,19 +38,19 @@ public class ContactItemSearchAdapter extends RecyclerView.Adapter<ContactItemSe
         }
 
         public interface IHealthViewHolderClicks {
-            void onClick(JSONResponse.Contents item);
+            void onClick(SearchItem item);
         }
     }
 
-    public ContactItemSearchAdapter(ViewHolder.IHealthViewHolderClicks ItemClickListener, Comparator<JSONResponse.Contents> comparator) {
+    public ContactItemSearchAdapter(ViewHolder.IHealthViewHolderClicks ItemClickListener, Comparator<SearchItem> comparator) {
         mClickListener = new WeakReference<>(ItemClickListener);
         mComparator = comparator;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        JSONResponse.Contents item = mSortedList.get(position);
-        holder.mTitleTextView.setText(item.getComments());
+        SearchItem item = mSortedList.get(position);
+        holder.mTitleTextView.setText(item.getContent());
         holder.mItem = item;
     }
 
@@ -66,9 +66,9 @@ public class ContactItemSearchAdapter extends RecyclerView.Adapter<ContactItemSe
         return vh;
     }
 
-    private final SortedList<JSONResponse.Contents> mSortedList = new SortedList<>(JSONResponse.Contents.class, new SortedList.Callback<JSONResponse.Contents>() {
+    private final SortedList<SearchItem> mSortedList = new SortedList<>(SearchItem.class, new SortedList.Callback<SearchItem>() {
         @Override
-        public int compare(JSONResponse.Contents a, JSONResponse.Contents b) {
+        public int compare(SearchItem a, SearchItem b) {
             return mComparator.compare(a, b);
         }
 
@@ -93,40 +93,40 @@ public class ContactItemSearchAdapter extends RecyclerView.Adapter<ContactItemSe
         }
 
         @Override
-        public boolean areContentsTheSame(JSONResponse.Contents oldItem, JSONResponse.Contents newItem) {
-            return oldItem.getComments().equals(newItem.getComments());
+        public boolean areContentsTheSame(SearchItem oldItem, SearchItem newItem) {
+            return oldItem.getContent().equals(newItem.getContent());
         }
 
         @Override
-        public boolean areItemsTheSame(JSONResponse.Contents item1, JSONResponse.Contents item2) {
-            return item1.getReminder_id() == item2.getReminder_id();
+        public boolean areItemsTheSame(SearchItem item1, SearchItem item2) {
+            return item1.getContent() == item2.getContent();
         }
     });
 
-    public void add(JSONResponse.Contents item) {
+    public void add(SearchItem item) {
         mSortedList.add(item);
     }
 
-    public void remove(JSONResponse.Contents item) {
+    public void remove(SearchItem item) {
         mSortedList.remove(item);
     }
 
-    public void add(List<JSONResponse.Contents> item) {
+    public void add(List<SearchItem> item) {
         mSortedList.addAll(item);
     }
 
-    public void remove(List<JSONResponse.Contents> items) {
+    public void remove(List<SearchItem> items) {
         mSortedList.beginBatchedUpdates();
-        for (JSONResponse.Contents item : items) {
+        for (SearchItem item : items) {
             mSortedList.remove(item);
         }
         mSortedList.endBatchedUpdates();
     }
 
-    public void replaceAll(List<JSONResponse.Contents> items) {
+    public void replaceAll(List<SearchItem> items) {
         mSortedList.beginBatchedUpdates();
         for (int i = mSortedList.size() - 1; i >= 0; i--) {
-            final JSONResponse.Contents item = mSortedList.get(i);
+            final SearchItem item = mSortedList.get(i);
             if (!items.contains(item)) {
                 mSortedList.remove(item);
             }

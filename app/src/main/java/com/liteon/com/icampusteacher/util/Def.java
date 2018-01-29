@@ -23,6 +23,9 @@ public class Def {
 	public static final String SP_CONTACT_LIST = "com.liteon.icampusguardian.SP_BT_WATCH_ADDRESS";
 	public static final String SP_STUDENT_ID = "com.liteon.icampusguardian.SP_STUDENT_ID";
 	public static final String SP_STUDENT_NAME = "com.liteon.icampusguardian.SP_STUDENT_ID";
+	public static final String SP_SCHOOL_INFO = "com.liteon.icampusguardian.SP_SCHOOL_INFO";
+	public static final String SP_SEARCH_REMINDER_ID = "com.liteon.icampusguardian.SP_SEARCH_REMINDER_ID";
+	public static final String SP_SEARCH_STUDENT_NAME = "com.liteon.icampusguardian.SP_SEARCH_STUDENT_NAME";
 
 	//RET CODE there are two kind of success code
 	public static final String RET_SUCCESS_1 = "SUC01";
