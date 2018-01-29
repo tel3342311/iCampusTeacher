@@ -3,7 +3,6 @@ package com.liteon.com.icampusteacher.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -67,7 +66,7 @@ public class Utils {
         dialog.setIcon(R.drawable.ic_error_outline_black_24dp);
         dialog.setBtnText(App.getContext().getString(R.string.login_ok));
         dialog.setBtnConfirm(v -> dialog.dismiss());
-        dialog.show((App.getCurrnetActivity()).getSupportFragmentManager(), "dialog_fragment");
+        dialog.show((App.getCurrentActivity()).getSupportFragmentManager(), "dialog_fragment");
 
     }
 
@@ -78,7 +77,7 @@ public class Utils {
         dialog.setIcon(R.drawable.ic_error_outline_black_24dp);
         dialog.setBtnText(App.getContext().getString(R.string.login_ok));
         dialog.setBtnConfirm(listener);
-        dialog.show((App.getCurrnetActivity()).getSupportFragmentManager(), "dialog_fragment");
+        dialog.show((App.getCurrentActivity()).getSupportFragmentManager(), "dialog_fragment");
 
     }
 }

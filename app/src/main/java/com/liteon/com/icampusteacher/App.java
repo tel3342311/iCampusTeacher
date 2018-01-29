@@ -23,7 +23,7 @@ public class App extends Application implements  Application.ActivityLifecycleCa
         return mContext;
     }
 
-    public static AppCompatActivity getCurrnetActivity() {
+    public static AppCompatActivity getCurrentActivity() {
         return mActivity;
     }
 
