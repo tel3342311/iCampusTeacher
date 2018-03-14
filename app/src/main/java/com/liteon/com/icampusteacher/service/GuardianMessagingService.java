@@ -56,8 +56,8 @@ public class GuardianMessagingService extends FirebaseMessagingService {
 	}
 	
 	private void handleNow(RemoteMessage message) {
-		Log.d(TAG, "FCM message handle Now, Message Body: " + message.toString());
-		sendNotification(message.toString());
+		Log.d(TAG, "FCM message handle Now, Message Title: "+ message.getNotification().getTitle() + " Message Body: " + message.getNotification().getBody());
+		sendNotification(message);
 		sendBrocastToAp(message.toString());
 	}
 	
@@ -70,9 +70,11 @@ public class GuardianMessagingService extends FirebaseMessagingService {
 	/**
      * Create and show a simple notification containing the received FCM message.
      *
-     * @param messageBody FCM message body received.
+     * @param message FCM message body received.
      */
-	private void sendNotification(String messageBody) {
+	private void sendNotification(RemoteMessage message) {
+		String title = message.getNotification().getTitle();
+		String body = message.getNotification().getBody();
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.setAction(Def.ACTION_NOTIFY);
 		intent.putExtra(Def.EXTRA_NOTIFY_TYPE, "sos");
@@ -84,8 +86,8 @@ public class GuardianMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle("iCampus Guardian")
-                .setContentText(messageBody)
+                .setContentTitle(title)
+                .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
