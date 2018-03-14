@@ -199,7 +199,7 @@ public class DBHelper extends SQLiteOpenHelper {
 			cv.put(ChildEntry.COLUMN_NAME_HEIGHT, item.getHeight());
 			cv.put(ChildEntry.COLUMN_NAME_WEIGHT, item.getWeight());
 			cv.put(ChildEntry.COLUMN_NAME_ROLL_NO, item.getRoll_no());
-			cv.put(ChildEntry.COLUMN_NAME_CLASS, item.get_class());
+			cv.put(ChildEntry.COLUMN_NAME_CLASS, item.getClass_no());
 			cv.put(ChildEntry.COLUMN_NAME_STUDENT_ID, item.getStudent_id());
 			cv.put(ChildEntry.COLUMN_NAME_GRADE, item.getGrade());
 			cv.put(ChildEntry.COLUMN_NAME_REGISTARTION_NO, item.getRegistartion_no());
@@ -222,7 +222,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(ChildEntry.COLUMN_NAME_HEIGHT, item.getHeight());
         cv.put(ChildEntry.COLUMN_NAME_WEIGHT, item.getWeight());
         cv.put(ChildEntry.COLUMN_NAME_ROLL_NO, item.getRoll_no());
-        cv.put(ChildEntry.COLUMN_NAME_CLASS, item.get_class());
+        cv.put(ChildEntry.COLUMN_NAME_CLASS, item.getClass_no());
 		cv.put(ChildEntry.COLUMN_NAME_GRADE, item.getGrade());
 		cv.put(ChildEntry.COLUMN_NAME_REGISTARTION_NO, item.getRegistartion_no());
 		cv.put(ChildEntry.COLUMN_NAME_EMERGENCY_CONTACT, item.getEmergency_contact());
@@ -243,7 +243,7 @@ public class DBHelper extends SQLiteOpenHelper {
             item.setHeight(Integer.toString(cursor.getInt(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_HEIGHT))));
             item.setWeight(Integer.toString(cursor.getInt(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_WEIGHT))));
             item.setRoll_no(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_ROLL_NO))));
-            item.set_class(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_CLASS)));
+            item.setClass_no(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_CLASS)));
             item.setStudent_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_STUDENT_ID))));
             item.setGrade(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_GRADE)));
             item.setRegistartion_no(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_REGISTARTION_NO)));
@@ -295,7 +295,7 @@ public class DBHelper extends SQLiteOpenHelper {
 				item.setHeight(Integer.toString(cursor.getInt(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_HEIGHT))));
 				item.setWeight(Integer.toString(cursor.getInt(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_WEIGHT))));
 				item.setRoll_no(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_ROLL_NO))));
-				item.set_class(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_CLASS)));
+				item.setClass_no(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_CLASS)));
 				item.setStudent_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_STUDENT_ID))));
 				item.setGrade(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_GRADE)));
                 item.setRegistartion_no(cursor.getString(cursor.getColumnIndex(ChildEntry.COLUMN_NAME_REGISTARTION_NO)));
@@ -425,7 +425,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		item.setHeight("150");
 		item.setWeight("40");
 		item.setRoll_no(11);
-		item.set_class("1");
+		item.setClass_no("1");
 		item.setStudent_id(1);
 		studentList.add(item);
 
@@ -439,7 +439,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		item.setHeight("140");
 		item.setWeight("40");
 		item.setRoll_no(12);
-		item.set_class("2");
+		item.setClass_no("2");
 		item.setStudent_id(2);
         studentList.add(item);
 

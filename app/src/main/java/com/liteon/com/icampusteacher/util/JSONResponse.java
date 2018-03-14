@@ -466,7 +466,7 @@ public class JSONResponse {
 		@SerializedName("nickname")
 		private String nickname;
 		@SerializedName("class")
-		private String _class;
+		private String class_no;
 		@SerializedName("roll_no")
 		private int roll_no;
 		@SerializedName("height")
@@ -561,16 +561,16 @@ public class JSONResponse {
 			this.nickname = nickname;
 		}
 		/**
-		 * @return the _class
+		 * @return the class_no
 		 */
-		public String get_class() {
-			return _class;
+		public String getClass_no() {
+			return class_no;
 		}
 		/**
-		 * @param _class the _class to set
+		 * @param class_no the class_no to set
 		 */
-		public void set_class(String _class) {
-			this._class = _class;
+		public void setClass_no(String class_no) {
+			this.class_no = class_no;
 		}
 		/**
 		 * @return the roll_no
