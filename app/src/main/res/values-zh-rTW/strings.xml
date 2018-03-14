@@ -97,6 +97,7 @@
     <string name="alarm_syncing">同步中</string>
     <string name="origin_password_wrong">原密碼錯誤</string>
     <string name="new_password_wrong">密碼與確認密碼不相同</string>
+    <string name="new_password_hint">密碼至少八碼英文或數字</string>
     <!-- Location -->
     <string name="unable_to_locate">無法定位</string>
 </resources>
