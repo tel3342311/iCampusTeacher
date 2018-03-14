@@ -198,7 +198,7 @@ public class StudentDetailFragment extends Fragment {
     }
 
     private void setupListener() {
-        mToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
+        mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_navigate_before_white_24dp));
         mToolbar.setNavigationOnClickListener(v -> {
             ((MainActivity)getActivity()).changeFragment(MyClassFragment.newInstance());
         });
@@ -412,6 +412,7 @@ public class StudentDetailFragment extends Fragment {
                 mLastPositionUpdateTime = response.getReturn().getResults().getEvent_occured_date();
 
                 mLastPosition = new LatLng(Double.parseDouble(lat), Double.parseDouble(lnt));
+                return mLastPositionUpdateTime;
             } else if (TextUtils.equals(Def.RET_ERR_02, response.getReturn().getResponseSummary().getStatusCode())) {
                 return Def.RET_ERR_02;
             }
@@ -445,7 +446,7 @@ public class StudentDetailFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE \n HH:mm");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd EE HH:mm");
                     String updateTime = sdf.format(date);
                     mUpdateTimeView.setText(updateTime);
                 }
