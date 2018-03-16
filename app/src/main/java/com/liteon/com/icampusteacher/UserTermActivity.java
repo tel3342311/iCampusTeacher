@@ -3,6 +3,8 @@ package com.liteon.com.icampusteacher;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
@@ -22,6 +24,7 @@ public class UserTermActivity extends AppCompatActivity implements View.OnClickL
     private AppCompatCheckBox mRadioButton;
     private ImageView mCancel;
     private SharedPreferences mSharePreference;
+    private TextView mAppVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class UserTermActivity extends AppCompatActivity implements View.OnClickL
         mBottomView = findViewById(R.id.bottom_bar);
         mRadioButton = findViewById(R.id.user_improve_plan);
         mCancel = findViewById(R.id.cancel);
+        mAppVersion = findViewById(R.id.app_ver_value);
+
     }
 
     private void setupToolbar() {
@@ -62,6 +67,15 @@ public class UserTermActivity extends AppCompatActivity implements View.OnClickL
             mBottomView.setVisibility(View.VISIBLE);
         }
         mRadioButton.setChecked(mSharePreference.getBoolean(Def.SP_IMPROVE_PLAN, false));
+        PackageInfo pInfo;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            mAppVersion.setText(version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void setListener() {
