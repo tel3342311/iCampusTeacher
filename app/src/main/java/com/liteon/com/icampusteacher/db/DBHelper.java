@@ -50,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	private static final String SQL_DELETE_ACCOUNT_TABLE = "DROP TABLE IF EXISTS " + AccountEntry.TABLE_NAME;
 
 	// Child data
-	public static final String SQL_QUERY_ALL_CHILDREN_DATA = "SELECT * FROM " + ChildEntry.TABLE_NAME;
+	public static final String SQL_QUERY_ALL_CHILDREN_DATA = "SELECT * FROM " + ChildEntry.TABLE_NAME + " ORDER BY " + ChildEntry.COLUMN_NAME_STUDENT_ID + " ASC";
 	private static final String SQL_CREATE_CHILDREN_TABLE = "CREATE TABLE " + ChildEntry.TABLE_NAME + " ("
             + ChildEntry.COLUMN_NAME_STUDENT_ID + TEXT_TYPE + " PRIMARY KEY" + COMMA_SEP
             + ChildEntry.COLUMN_NAME_UUID + TEXT_TYPE + COMMA_SEP
