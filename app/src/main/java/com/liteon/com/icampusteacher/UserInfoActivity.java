@@ -46,7 +46,6 @@ public class UserInfoActivity extends AppCompatActivity {
     private String mToken;
     private JSONResponse.Parent mAccountItem;
     private View progressBarHolder;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +54,6 @@ public class UserInfoActivity extends AppCompatActivity {
         setupToolbar();
         setListener();
         mDbHelper = DBHelper.getInstance(this);
-        SharedPreferences sp = getSharedPreferences(Def.SHARE_PREFERENCE, MODE_PRIVATE);
-        mToken = sp.getString(Def.SP_LOGIN_TOKEN, "");
-        mAccountItem = mDbHelper.getAccountByToken(mDbHelper.getReadableDatabase(), mToken);
     }
 
     private void findViews() {
@@ -175,6 +171,9 @@ public class UserInfoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        SharedPreferences sp = getSharedPreferences(Def.SHARE_PREFERENCE, MODE_PRIVATE);
+        mToken = sp.getString(Def.SP_LOGIN_TOKEN, "");
+        mAccountItem = mDbHelper.getAccountByToken(mDbHelper.getReadableDatabase(), mToken);
         mToolbar.setTitle("");
         mAccount.setText(mAccountItem.getUsername());
         mOriginPassword.setText(mAccountItem.getPassword());

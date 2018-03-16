@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.liteon.com.icampusteacher.db.DBHelper;
 import com.liteon.com.icampusteacher.fragments.ContactMatterFragment;
 import com.liteon.com.icampusteacher.fragments.HealthMainFragment;
 import com.liteon.com.icampusteacher.fragments.MyClassFragment;
@@ -91,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Log out
         mLogoutButton.setOnClickListener(v -> {
-            SharedPreferences sp = getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
+            DBHelper mDbHelper = DBHelper.getInstance(this);
+            SharedPreferences sp = getSharedPreferences(Def.SHARE_PREFERENCE, MODE_PRIVATE);
+            mDbHelper.deleteAccount(mDbHelper.getWritableDatabase());
             SharedPreferences.Editor editor = sp.edit();
             editor.remove(Def.SP_LOGIN_TOKEN);
             editor.commit();
