@@ -22,6 +22,7 @@ import com.liteon.com.icampusteacher.util.CustomDialog;
 import com.liteon.com.icampusteacher.util.Def;
 import com.liteon.com.icampusteacher.util.GuardianApiClient;
 import com.liteon.com.icampusteacher.util.JSONResponse;
+import com.liteon.com.icampusteacher.util.SelectURLDialog;
 import com.liteon.com.icampusteacher.util.Utils;
 
 import java.text.ParseException;
@@ -72,7 +73,11 @@ public class LoginActivity extends AppCompatActivity {
     private void setListener() {
         mAccount.addTextChangedListener(mAccountTextWatcher);
         mPassword.addTextChangedListener(mPasswordTextWatcher);
-        mLogin.setOnClickListener(v -> new LoginTask().execute());
+        mLogin.setOnClickListener(v -> {
+            SelectURLDialog dialog = new SelectURLDialog();
+            dialog.setBtnConfirm(view -> new LoginTask().execute());
+            dialog.show(getSupportFragmentManager(), "dialog_fragment");
+        });
         mforgetPassword.setOnClickListener(v -> {
 
             Intent intent = new Intent();
