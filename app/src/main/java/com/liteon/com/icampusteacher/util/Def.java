@@ -1,6 +1,9 @@
 package com.liteon.com.icampusteacher.util;
 
 public class Def {
+	//URL
+	public final static String URL_3rd_party = "icg.aricentcoe.com:8080";
+	public final static String URL_internal = "www.icareguardian.com";
 	//SharePreference
 	public final static String SHARE_PREFERENCE = "com.liteon.icampusguardian.PREFERENCE_FILE_KEY";
 	public final static String SP_USER_TERM_READ = "com.liteon.icampusguardian.SP_USER_TERM_READ";
@@ -26,6 +29,7 @@ public class Def {
 	public static final String SP_SCHOOL_INFO = "com.liteon.icampusguardian.SP_SCHOOL_INFO";
 	public static final String SP_SEARCH_REMINDER_ID = "com.liteon.icampusguardian.SP_SEARCH_REMINDER_ID";
 	public static final String SP_SEARCH_STUDENT_NAME = "com.liteon.icampusguardian.SP_SEARCH_STUDENT_NAME";
+	public static final String SP_URL = "com.liteon.icampusguardian.SP_URL";
 
 	//RET CODE there are two kind of success code
 	public static final String RET_SUCCESS_1 = "SUC01";

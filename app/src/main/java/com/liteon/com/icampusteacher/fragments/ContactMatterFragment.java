@@ -198,6 +198,7 @@ public class ContactMatterFragment extends Fragment {
             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(mInputField.getWindowToken(), 0);
             resetItemToday();
+            mInputField.setEnabled(true);
         });
 
         mConfirm.setOnClickListener( v -> {

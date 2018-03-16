@@ -1,4 +1,4 @@
-package com.liteon.icampusguardian.util;
+package com.liteon.com.icampusteacher.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.liteon.icampusguardian.R;
+import com.liteon.com.icampusteacher.R;
 
 public class SelectURLDialog extends DialogFragment {
 	private AppCompatButton mBtnURL1;
@@ -20,7 +20,7 @@ public class SelectURLDialog extends DialogFragment {
 	private View.OnClickListener mConfirmListener;
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_select_url, container);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         findViews(view);
