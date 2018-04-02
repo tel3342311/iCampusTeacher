@@ -194,7 +194,7 @@ public class StudentDetailFragment extends Fragment {
         mLocationOnMap = mPositionToggle.findViewById(R.id.map_location);
 
         //Hide these item
-        EnterSubView.setVisibility(View.GONE);
+        EnterSubView.setVisibility(View.INVISIBLE);
         HealthySubView.setVisibility(View.GONE);
     }
 
