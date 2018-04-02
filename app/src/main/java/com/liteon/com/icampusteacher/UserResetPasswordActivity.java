@@ -103,7 +103,7 @@ public class UserResetPasswordActivity extends AppCompatActivity implements View
 
     private JSONResponse resetPassword() {
         String strName = mName.getText().toString();
-        GuardianApiClient apiClient = new GuardianApiClient(this);
+        GuardianApiClient apiClient = GuardianApiClient.getInstance(UserResetPasswordActivity.this);
         return apiClient.resetPassword(strName);
     }
 

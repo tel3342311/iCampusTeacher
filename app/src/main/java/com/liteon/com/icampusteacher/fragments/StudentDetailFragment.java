@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.liteon.com.icampusteacher.App;
 import com.liteon.com.icampusteacher.MainActivity;
 import com.liteon.com.icampusteacher.R;
 import com.liteon.com.icampusteacher.db.DBHelper;
@@ -395,7 +396,7 @@ public class StudentDetailFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
-            GuardianApiClient apiClient = new GuardianApiClient(getActivity());
+            GuardianApiClient apiClient = GuardianApiClient.getInstance(App.getContext());
             JSONResponse response = apiClient.getStudentLocation(mStudent);
             if (response == null) {
                 return null;

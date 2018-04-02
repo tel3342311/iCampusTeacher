@@ -39,7 +39,7 @@ public class GuardianInstanceIDService extends FirebaseInstanceIdService {
     	SharedPreferences sp = getApplicationContext().getSharedPreferences(Def.SHARE_PREFERENCE, Context.MODE_PRIVATE);
     	String loginToken = sp.getString(Def.SP_LOGIN_TOKEN, "");
     	if (!TextUtils.isEmpty(loginToken)) {
-    		GuardianApiClient apiClient = new GuardianApiClient(getApplicationContext());
+    		GuardianApiClient apiClient = GuardianApiClient.getInstance(getApplicationContext());
     		apiClient.setToken(loginToken);
     		apiClient.updateAppToken(fireBaseToken);
     	}
