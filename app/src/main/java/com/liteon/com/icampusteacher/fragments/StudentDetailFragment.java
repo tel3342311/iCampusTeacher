@@ -178,7 +178,7 @@ public class StudentDetailFragment extends Fragment {
         mHealthyToggle = rootView.findViewById(R.id.student_healthy);
         mPositionToggle = rootView.findViewById(R.id.student_position);
 
-        EnterSubView = mEnterToggle.findViewById(R.id.enter_item).findViewById(R.id.absent_report);
+        EnterSubView = rootView.findViewById(R.id.absent_report);
         HealthySubView = mHealthyList = mHealthyToggle.findViewById(R.id.healthy_item).findViewById(R.id.healthy_event_view);
         PositionSubView = mPositionToggle.findViewById(R.id.position_item).findViewById(R.id.map_frame);
 
@@ -194,7 +194,7 @@ public class StudentDetailFragment extends Fragment {
         mLocationOnMap = mPositionToggle.findViewById(R.id.map_location);
 
         //Hide these item
-        EnterSubView.setVisibility(View.INVISIBLE);
+        EnterSubView.setVisibility(View.GONE);
         HealthySubView.setVisibility(View.GONE);
     }
 

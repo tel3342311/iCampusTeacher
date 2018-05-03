@@ -144,7 +144,7 @@
     <dimen name="student_item_height">120dp</dimen>
     <dimen name="student_item_icon_size">48dp</dimen>
     <dimen name="student_info_avatar_size">130dp</dimen>
-    <dimen name="student_info_card_size">186dp</dimen>
+    <dimen name="student_info_card_size">146dp</dimen>
     <dimen name="student_info_arrow_size">40dp</dimen>
     <dimen name="com_healthy_item_height">48dp</dimen>
     <dimen name="map_height">400dp</dimen>
